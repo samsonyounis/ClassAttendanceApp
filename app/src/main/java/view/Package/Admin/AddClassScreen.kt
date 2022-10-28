@@ -3,11 +3,7 @@ package view.Package.Admin
 import Model.Class
 import Repository.Repository
 import ViewModel.AddClassViewModel
-import ViewModel.EnrollmentViewModel
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -21,12 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import view.Package.ReusableFunctions.circularProgress
 import view.Package.ReusableFunctions.commonButton
 import view.Package.ReusableFunctions.outlinedTextField
@@ -40,12 +36,13 @@ fun addClassScreen(navController: NavController){
     var classTitle by rememberSaveable { mutableStateOf("") }
     var classDuration by rememberSaveable { mutableStateOf("") }
     var classInstructor by rememberSaveable { mutableStateOf("") }
+
     var toplabel by rememberSaveable { mutableStateOf("Add class") }
     var feedback by rememberSaveable { mutableStateOf(" Class added successfully") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
 
-    val repository = Repository()
-    val viewmodel = AddClassViewModel(repository)
+    val repository = Repository() // instance of repository
+    val viewmodel = AddClassViewModel(repository) // instance of view model
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
@@ -53,64 +50,67 @@ fun addClassScreen(navController: NavController){
     topBar = {
         topRow(text = "Add class", navController = navController)
     }) {
-        // showing the circular progress
+        // showing the circular progress while adding the class
         if (showProgress == true) {
             Dialog(onDismissRequest = { showProgress == true }) {
                 circularProgress(showProgress = showProgress)
             }
         }
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 20.dp)
-            .verticalScroll(
-                rememberScrollState()
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly) {
-            outlinedTextField(
-                valueText = classCode, onValueChange = {classCode = it}, isError = false,
-                labelText = "Class code", placeholderText = "e.g SIT400",
-                keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-            )
-            outlinedTextField(
-                valueText = classTitle, onValueChange = {classTitle = it}, isError = false,
-                labelText = "Class name/Title", placeholderText = "e.g information security",
-                keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-            )
-            outlinedTextField(
-                valueText = classDuration, onValueChange = {classDuration = it}, isError = false,
-                labelText = "Class Duration in hours/semester", placeholderText = "e.g 36",
-                keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-            )
-            outlinedTextField(
-                valueText = classInstructor, onValueChange = {classInstructor = it}, isError = false,
-                labelText = "Class Instructor", placeholderText = "e.g Duncan",
-                keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
-            )
-            commonButton(onClick = {
-                showProgress = true
-                val singleClass = Class(classCode,classTitle,classDuration,classInstructor)
-                viewmodel.AddClass(singleClass)
-                viewmodel.feedback.observe(lifeCycleOwner){response->
-                    if (response == "success"){
-                        showProgress = false
-                        navController.navigate("feedback_Screen/$toplabel/$feedback" )
+        // WindowInset and scrollable column with the input fields
+        ProvideWindowInsets {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 20.dp)
+                .navigationBarsWithImePadding()
+                .verticalScroll(
+                    rememberScrollState()
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly) {
+                outlinedTextField(
+                    valueText = classCode, onValueChange = {classCode = it}, isError = false,
+                    labelText = "Class code", placeholderText = "e.g SIT400",
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                )
+                outlinedTextField(
+                    valueText = classTitle, onValueChange = {classTitle = it}, isError = false,
+                    labelText = "Class name/Title", placeholderText = "e.g information security",
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                )
+                outlinedTextField(
+                    valueText = classDuration, onValueChange = {classDuration = it}, isError = false,
+                    labelText = "Class Duration in hours/semester", placeholderText = "e.g 36",
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                )
+                outlinedTextField(
+                    valueText = classInstructor, onValueChange = {classInstructor = it}, isError = false,
+                    labelText = "Class Instructor", placeholderText = "e.g Duncan",
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                // onclick listener button
+                commonButton(onClick = {
+                    showProgress = true
+                    //creating class object
+                    val singleClass = Class(classCode,classTitle,classDuration,classInstructor)
+                    // calling the function in the view model and observing the value
+                    viewmodel.AddClass(singleClass)
+                    viewmodel.feedback.observe(lifeCycleOwner){response->
+                        if (response == "success"){
+                            showProgress = false
+                            navController.navigate("feedback_Screen/$toplabel/$feedback" )
+                        }
+                        else{
+                            val encodedResponse = URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
+                            showProgress = false
+                            navController.navigate("feedback_Screen/$toplabel/$encodedResponse" )
+                        }
                     }
-                    else{
-                        val encodedResponse = URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
-                        showProgress = false
-                        navController.navigate("feedback_Screen/$toplabel/$encodedResponse" )
-                    }
-                }
-                 },
-                label = "Add")
+                },
+                    label = "Add")
+            }
         }
-    }
-}
 
-@Preview
-@Composable
-fun PreviewAddClassScreen() {
-    addClassScreen(navController = rememberNavController())
+    }
 }

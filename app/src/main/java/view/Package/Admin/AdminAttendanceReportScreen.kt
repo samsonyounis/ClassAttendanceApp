@@ -4,7 +4,6 @@ import Model.Faculty_AttendanceReport
 import ViewModel.AdminAttendanceReportViewModel
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -76,13 +75,13 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
                 Text(text = "Student RegNo",
                     style = MaterialTheme.typography.h2)
 
-                Text(text = "Days present",
+                Text(text = "Student name",
                     style = MaterialTheme.typography.h2)
 
-                Text(text = "Days absent",
+                Text(text = "Hours attended",
                     style = MaterialTheme.typography.h2)
 
-                Text(text = "Total days",
+                Text(text = "Total class hours",
                     style = MaterialTheme.typography.h2)
             }
             if(!attendanceRecords.isEmpty()){
@@ -102,28 +101,6 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
             else{
                 Text(text = serverRes)
             }
-            /*
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(100.dp)) {
-                Text(text = "j31/234/2012")
-
-                Text(text = "20")
-
-                Text(text = "10")
-
-                Text(text = "40")
-            }
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(100.dp)) {
-                Text(text = "j32/2342/2017")
-
-                Text(text = "100")
-
-                Text(text = "5")
-
-                Text(text = "40")
-            }
-            */
         }
     }
 }

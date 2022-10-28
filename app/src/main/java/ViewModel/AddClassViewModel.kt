@@ -1,6 +1,7 @@
 package ViewModel
 
 import Model.Class
+import Model.ServerRes
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,19 +13,19 @@ class AddClassViewModel(private val repository: Repository):ViewModel() {
     
     var feedback:MutableLiveData<String> = MutableLiveData()
     fun AddClass(singleClass:Class){
-        repository.AddClass(singleClass).enqueue(object :Callback<String>{
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        repository.AddClass(singleClass).enqueue(object :Callback<ServerRes>{
+            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
                 if (response.isSuccessful){
                     feedback.value = "success"
                 }
                 else{
-                    feedback.value = "failed to add class\n\n${response.code()}"
+                    feedback.value = "failed to add class\n${response.body()?.message}\n${response.code()}"
                 }
             }
 
 
-            override fun onFailure(call: Call<String>, t: Throwable){
-                feedback.value = "check connection\n\n${t.message}"
+            override fun onFailure(call: Call<ServerRes>, t: Throwable){
+                feedback.value = "something went wrong\n\n${t.message}"
             }
 
         })

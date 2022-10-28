@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface Api {
 
 @POST("requestAccount")
-fun AddAccountRequest(@Body request:AccountRequest):Call<String>
+fun AddAccountRequest(@Body request:AccountRequest):Call<ServerRes>
 
 @POST("/api")
 fun RecordAttendance(@Body attendance:Attendance):Call<String>
@@ -18,20 +18,20 @@ fun AuthorizeAttendance(@Body authorization:AttendanceAuthorization):Call<String
 @DELETE("deleteAuthorization")
 fun DeleteAuthorization(@Query("classCode") classCode: String):Call<String>
 
-@POST("/api")
-fun AddClass(@Body singleClass:Class):Call<String>
+@POST("class")
+fun AddClass(@Body singleClass:Class):Call<ServerRes>
 
-@POST("/api")
-fun createAccount(@Body account:UserAccount):Call<String>
+@POST("userAccounts/create")
+fun createAccount(@Body account:UserAccount):Call<ServerRes>
 
-@POST("/enrollment")
-fun AddEnrollment(@Body enrollment:Enrollment):Call<String>
+@POST("enrollment")
+fun AddEnrollment(@Body enrollment:Enrollment):Call<ServerRes>
 
-@POST("/api")
-fun AddStudent(@Body student:Student):Call<String>
+@POST("student")
+fun AddStudent(@Body student:Student):Call<ServerRes>
 
-@POST("/api")
- fun AddStaff(@Body staff: Staff):Call<String>
+@POST("staff")
+ fun AddStaff(@Body staff: Staff):Call<ServerRes>
 
  @GET("/api")
  fun Get_StudentAttendanceReport(@Query("regNo") regNo:String):Call<List<Student_attendanceReport>>
@@ -39,9 +39,9 @@ fun AddStudent(@Body student:Student):Call<String>
  @GET("/api")
  fun Get_FacultyAttendanceReport(@Query("classCode") classCode:String):Call<List<Faculty_AttendanceReport>>
 
- @GET("/api")
+ @GET("requestAccount")
  fun Get_AccountRequests():Call<List<AccountRequest>>
 
- @POST("login")
- fun LoginUser(@Body loginRequest: LoginRequest):Call<String>
+ @POST("userAccounts/login")
+ fun LoginUser(@Body loginRequest: LoginRequest):Call<ServerRes>
 }

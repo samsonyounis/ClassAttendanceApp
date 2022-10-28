@@ -1,10 +1,9 @@
 package Model
 
     data class AccountRequest(
-        val userID: String,
-        val firstName: String,
-        val lastName: String,
+        val student_ID: String,
+        val student_Firstname: String,
+        val student_lastname: String,
         val email: String,
-        val phone: String,
-        val accountType:String
+        val phone: String
     )

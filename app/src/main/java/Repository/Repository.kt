@@ -6,7 +6,7 @@ import retrofit2.Call
 
 class Repository {
     // function to add account request
-fun AddAccountRequest(request: AccountRequest):Call<String>{
+fun AddAccountRequest(request: AccountRequest):Call<ServerRes>{
     return RetrofitObjInstance.ApiConnect.AddAccountRequest(request)
 }
 
@@ -24,23 +24,23 @@ fun AddAccountRequest(request: AccountRequest):Call<String>{
         return RetrofitObjInstance.ApiConnect.DeleteAuthorization(classCode)
     }
     // function to add single class record
-    fun AddClass(singleClass:Class):Call<String>{
+    fun AddClass(singleClass:Class):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.AddClass(singleClass)
     }
     // function to create user account
-    fun CreateUserAccount(account: UserAccount):Call<String>{
+    fun CreateUserAccount(account: UserAccount):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.createAccount(account)
     }
     // function to add class enrollment
-    fun AddClassEnrollment(enrollment: Enrollment):Call<String>{
+    fun AddClassEnrollment(enrollment: Enrollment):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.AddEnrollment(enrollment)
     }
     // function to add single student
-    fun AddStudent(student: Student):Call<String>{
+    fun AddStudent(student: Student):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.AddStudent(student)
     }
     // function to add staff
-    fun AddStaff(staff: Staff):Call<String>{
+    fun AddStaff(staff: Staff):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.AddStaff(staff)
     }
     // function to get the attendance report for the student
@@ -59,7 +59,7 @@ fun AddAccountRequest(request: AccountRequest):Call<String>{
     }
 
     // function to login  the users.
-    fun LoginUser(loginRequest: LoginRequest):Call<String>{
+    fun LoginUser(loginRequest: LoginRequest):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.LoginUser(loginRequest)
     }
 }

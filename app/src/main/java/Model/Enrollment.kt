@@ -1,10 +1,9 @@
 package Model
 
 data class Enrollment(
-    val classCode:String,
-    val firstName:String,
-    val middleName:String,
-    val lastName:String,
-    val regNo:String,
+    val enrollmentID:EnrollmentID,
+    val stu_Firstname:String,
+    val stu_Middlename:String,
+    val stu_Lastname:String,
     val email:String
 )

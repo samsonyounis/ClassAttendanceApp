@@ -1,6 +1,7 @@
 package view.Package
 
 import Model.Enrollment
+import Model.EnrollmentID
 import Repository.Repository
 import ViewModel.EnrollmentViewModel
 import ViewModel.LoginViewModel
@@ -33,18 +34,19 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun enrollmentScreen(navController: NavController){
+    var studentID by rememberSaveable { mutableStateOf("") }
     var classCode by rememberSaveable { mutableStateOf("") }
     var firstName by rememberSaveable { mutableStateOf("") }
     var middleName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
-    var regNo by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
+
     var toplabel by rememberSaveable { mutableStateOf("Enrollment") }
     var feedback by rememberSaveable { mutableStateOf("Successfully enrolled") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
 
-    val repository = Repository()
-    val viewmodel = EnrollmentViewModel(repository)
+    val repository = Repository() // instance of the repository
+    val viewmodel = EnrollmentViewModel(repository) // instance of the viewModel
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
@@ -70,6 +72,11 @@ fun enrollmentScreen(navController: NavController){
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
                 outlinedTextField(
+                    valueText = studentID, onValueChange = { studentID = it }, isError = false,
+                    labelText = "registration number", placeholderText = "",
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                )
+                outlinedTextField(
                     valueText = classCode, onValueChange = { classCode = it }, isError = false,
                     labelText = "Class code", placeholderText = "e.g SIT400",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
@@ -91,21 +98,21 @@ fun enrollmentScreen(navController: NavController){
                     labelText = "Last name", placeholderText = "",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
-                outlinedTextField(
-                    valueText = regNo, onValueChange = { regNo = it }, isError = false,
-                    labelText = "registration number", placeholderText = "",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-                )
+
                 outlinedTextField(
                     valueText = email, onValueChange = { email = it }, isError = false,
                     labelText = "Email Address", placeholderText = "",
                     keyboardType = KeyboardType.Email, imeAction = ImeAction.Done
                 )
-
+                Spacer(modifier = Modifier.height(10.dp))
+                //onclick listener button
                 commonButton(
                     onClick = {
                         showProgress = true
-                        val enrollment = Enrollment(classCode,firstName,middleName,lastName,regNo,email)
+                        // creating the enrollmentID object and the enrollment Object
+                        val enrollmentID = EnrollmentID(studentID,classCode)
+                        val enrollment = Enrollment(enrollmentID,firstName,middleName,lastName,email)
+                        // calling the function in the view model and observing th value
                         viewmodel.AddEnrollment(enrollment)
                         viewmodel.feedback.observe(lifeCycleOwner){response->
                             if (response == "success"){

@@ -2,7 +2,7 @@ package Model
 
 data class Class(
     val classCode:String,
-    val classTitle:String,
-    val classHours:String,
-    val classInstructorsID:String
+    val title:String,
+    val classDuration:String,
+    val classInstructorID:String
 )

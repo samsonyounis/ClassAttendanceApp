@@ -1,6 +1,7 @@
 package ViewModel
 
 import Model.LoginRequest
+import Model.ServerRes
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,17 +13,17 @@ class LoginViewModel(private val repository: Repository):ViewModel() {
 
     var feedback:MutableLiveData<String> = MutableLiveData()
     fun LoginUser(loginRequest: LoginRequest){
-        repository.LoginUser(loginRequest).enqueue(object :Callback<String>{
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        repository.LoginUser(loginRequest).enqueue(object :Callback<ServerRes>{
+            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
                 if (response.isSuccessful){
                     feedback.value = "success"
                 }
                 else{
-                    feedback.value = "Login failed\n\n${response.errorBody()}"
+                    feedback.value = "Login failed\n${response.body()?.message}\n${response.code()}"
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
                 feedback.value = "check your connection\n\n${t.message}"
             }
 

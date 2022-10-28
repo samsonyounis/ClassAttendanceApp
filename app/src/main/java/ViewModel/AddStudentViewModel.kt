@@ -1,5 +1,6 @@
 package ViewModel
 
+import Model.ServerRes
 import Model.Student
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
@@ -13,17 +14,17 @@ class AddStudentViewModel(private val repository: Repository):ViewModel() {
     var feeddback:MutableLiveData<String> = MutableLiveData()
 
     fun AddStudent(student: Student){
-        repository.AddStudent(student).enqueue(object :Callback<String>{
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        repository.AddStudent(student).enqueue(object :Callback<ServerRes>{
+            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
                 if (response.isSuccessful){
                     feeddback.value = "success"
                 }
                 else{
-                    feeddback.value = "failed to add student\n\n${response.code()}"
+                    feeddback.value = "failed to add student\n${response.body()?.message}\n${response.code()}"
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
                 feeddback.value = "check connection\n\n${t.message}"
             }
         })

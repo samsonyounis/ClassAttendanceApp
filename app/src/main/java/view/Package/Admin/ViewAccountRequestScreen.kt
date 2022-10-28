@@ -46,25 +46,24 @@ fun viewAccountRequestScreen(navController: NavController,viewmodel: ViewAccount
     var password by rememberSaveable { mutableStateOf("57tygjg") }
     var accountType by rememberSaveable { mutableStateOf("student account") }
     var userID by rememberSaveable { mutableStateOf("j31/4532/2018") }
+
     var showProgress by rememberSaveable { mutableStateOf(false) }
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
     viewmodel.Get_AccountRequests()
-    viewmodel.feedback.observe(lifeCycleOwner){ feedback->
-        if (feedback.toString() =="success"){
+    viewmodel.feedback.observe(lifeCycleOwner) { feedback ->
+        if (feedback.toString() == "success") {
             serverRes = feedback
             requestList = viewmodel.requestList
             showProgress = true
-        }
-        else{
+        } else {
             serverRes = feedback
             requestList = listOf()
             showProgress = true
         }
 
     }
-    //LaunchedEffect(Unit, block = {})
 
     Scaffold(modifier = Modifier.padding(16.dp),
     topBar = {
@@ -103,18 +102,17 @@ fun viewAccountRequestScreen(navController: NavController,viewmodel: ViewAccount
                                         CircleShape
                                     ))
                             Column {
-                                Text(text = "User ID: ${i.userID}")
-                                Text(text = "User First name: ${i.firstName}")
-                                Text(text = "User Last name: ${i.lastName}")
-                                Text(text = "Email address: ${i.email}")
+                                Text(text = "student ID: ${i.student_ID}")
+                                Text(text = "student Firstname: ${i.student_Firstname}")
+                                Text(text = "student Lastname: ${i.student_lastname}")
+                                Text(text = "Email: ${i.email}")
                                 Text(text = "Phone: ${i.phone}")
-                                Text(text = "Account type: ${i.accountType}")
                             }
                         }
                         commonButton(onClick = {
-                            val userId = URLEncoder.encode(i.userID, StandardCharsets.UTF_8.toString())
+                            val userId = URLEncoder.encode(i.student_ID, StandardCharsets.UTF_8.toString())
                             navController.navigate(
-                                "createAccount_Screen/${i.email}/$userId/${i.accountType}/$userId")
+                                "createAccount_Screen/${i.email}/$userId/${i.email}/$userId")
                         }, label = "Create Account")
                     }
                 }

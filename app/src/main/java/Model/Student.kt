@@ -1,9 +1,13 @@
 package Model
 
+import org.jetbrains.annotations.NotNull
+
 data class Student(
-    val StudentID:String,
-    val Stu_firstName:String,
-    val Stu_middleName:String,
-    val Stu_lastName:String,
-    val Stu_course:String
+    val studentID:String,
+    val stu_Firstname:String,
+    val stu_Middlename:String,
+    val stu_Lastname:String,
+    val school:String,
+    val department:String,
+    val stu_Course:String
 )

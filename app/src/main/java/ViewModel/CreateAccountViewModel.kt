@@ -1,5 +1,6 @@
 package ViewModel
 
+import Model.ServerRes
 import Model.UserAccount
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
@@ -11,8 +12,8 @@ import retrofit2.Response
 class CreateAccountViewModel(private val repository: Repository):ViewModel() {
     var feedback:MutableLiveData<String> = MutableLiveData()
     fun CreateAccount(account: UserAccount){
-        repository.CreateUserAccount(account).enqueue(object :Callback<String>{
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        repository.CreateUserAccount(account).enqueue(object :Callback<ServerRes>{
+            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
                 if (response.isSuccessful){
                     feedback.value = "success"
                 }
@@ -21,7 +22,7 @@ class CreateAccountViewModel(private val repository: Repository):ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
                 feedback.value = "Check your connection\n\n${t.message}"
             }
 

@@ -1,6 +1,7 @@
 package ViewModel
 
 import Model.AccountRequest
+import Model.ServerRes
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,18 +14,20 @@ class RequestAccountViewModel(private val repository: Repository):ViewModel() {
     var response1:MutableLiveData<String> = MutableLiveData()
 
     fun AddAccountRequest(request: AccountRequest){
-        repository.AddAccountRequest(request).enqueue(object: Callback<String>{
+        repository.AddAccountRequest(request).enqueue(object: Callback<ServerRes>{
 
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
                 if (response.isSuccessful){
                     response1.value = "success"
                 }
                 else{
-                    response1.value = "failed to send request\n${response.code()}"
+                    response1.value = "${response.body()?.message}\n${response.code()}"
+                    //failed to send request
+                    //${response.code()}
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
                 response1.value = t.message
             }
 

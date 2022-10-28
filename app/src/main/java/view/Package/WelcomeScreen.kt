@@ -1,7 +1,6 @@
 package view.Package
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,8 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -58,21 +55,21 @@ fun welcomeScreen(navController: NavController){
                     Divider()
                     DropdownMenuItem(onClick = {
                         navController.navigate("start_Screen")
-                        sessionManager.saveUserType("student")
+                        sessionManager.saveUserType("STUDENT")
                     }) {
                         Text("Student")
                     }
                     Divider()
                     DropdownMenuItem(onClick = {
-                        navController.navigate("start_Screen")
-                        sessionManager.saveUserType("staff")
+                        navController.navigate("login_Screen")
+                        sessionManager.saveUserType("STAFF")
                     }) {
                         Text("Faculty staff")
                     }
                     Divider()
                     DropdownMenuItem(onClick = {
                         navController.navigate("login_Screen")
-                        sessionManager.saveUserType("admin")
+                        sessionManager.saveUserType("ADMIN")
                     }) {
                         Text("Admin/Faculty")
                     }

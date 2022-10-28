@@ -12,7 +12,7 @@ import retrofit2.Response
 class ViewAccountRequestViewModel(private val repository: Repository):ViewModel() {
 
     var feedback: MutableLiveData<String> = MutableLiveData()
-    lateinit var requestList: List<AccountRequest>
+    var requestList: List<AccountRequest> = listOf()
 
     fun Get_AccountRequests() {
         repository.Get_AccountRequests().enqueue(object : Callback<List<AccountRequest>> {
@@ -23,12 +23,12 @@ class ViewAccountRequestViewModel(private val repository: Repository):ViewModel(
                     feedback.value = "success"
                     requestList = response.body()!!
                 } else {
-                    feedback.value = "failure\n${response.code()}"
+                    feedback.value = "failure to get requests\n${response.code()}"
                 }
             }
 
             override fun onFailure(call: Call<List<AccountRequest>>, t: Throwable) {
-                feedback.value = t.message
+                feedback.value = "check connection ${t.message}"
             }
         })
     }
