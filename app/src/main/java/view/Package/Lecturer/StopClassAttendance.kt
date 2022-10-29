@@ -1,15 +1,11 @@
 package view.Package.Lecturer
 
 import Repository.Repository
-import ViewModel.EnrollmentViewModel
 import ViewModel.StopClassAttendanceViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -17,6 +13,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import view.Package.ReusableFunctions.circularProgress
@@ -34,10 +32,29 @@ fun StopAttendanceScreen(navController: NavController){
     var toplabel by rememberSaveable { mutableStateOf("Stop Attendance") }
     var feedback by rememberSaveable { mutableStateOf("Class attendance closed successfully") }
 
-    val repository = Repository()
-    val viewmodel = StopClassAttendanceViewModel(repository)
+    val repository = Repository() // instance of the repository
+    val viewmodel = StopClassAttendanceViewModel(repository) // instance of viewModel
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifeCycleOwner) {
+        // Create an observer that triggers our remembered callbacks
+        // for sending analytics events
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                showProgress = false
+            } else if (event == Lifecycle.Event.ON_STOP) {
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifeCycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifeCycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Scaffold(modifier = Modifier.padding(16.dp),
         topBar = {
@@ -63,9 +80,10 @@ fun StopAttendanceScreen(navController: NavController){
 
             commonButton(onClick = {
                 showProgress = true
+                //calling the function in the view model
                 viewmodel.DeleteAuthorization(classCode)
                 viewmodel.feedback.observe(lifeCycleOwner){response->
-                    if (response.toString() == "success"){
+                    if (response == "success"){
                         navController.navigate("feedback_Screen/$toplabel/$feedback" )
                     }
                     else{

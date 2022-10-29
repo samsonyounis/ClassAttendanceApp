@@ -37,10 +37,10 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun createAccountScreen(navController: NavController,username:String,password:String,accountType:String,
     userID:String) {
+    var userID by rememberSaveable { mutableStateOf(userID) }
+    var user_type by rememberSaveable { mutableStateOf(accountType) }
     var email by rememberSaveable { mutableStateOf(username) }
     var password by rememberSaveable { mutableStateOf(password) }
-    var accountType by rememberSaveable { mutableStateOf(accountType) }
-    var userID by rememberSaveable { mutableStateOf(userID) }
 
     var toplabel by rememberSaveable { mutableStateOf("Create account") }
     var feedback by rememberSaveable { mutableStateOf(" Accout created successfully") }
@@ -70,7 +70,8 @@ fun createAccountScreen(navController: NavController,username:String,password:St
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 20.dp).navigationBarsWithImePadding()
+                    .padding(top = 20.dp)
+                    .navigationBarsWithImePadding()
                     .verticalScroll(
                         rememberScrollState()
                     ),
@@ -98,7 +99,7 @@ fun createAccountScreen(navController: NavController,username:String,password:St
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     OutlinedTextField(
-                        value = accountType, onValueChange = { accountType = it },
+                        value = user_type, onValueChange = { user_type = it },
                         modifier = Modifier
                             .fillMaxWidth(),
                         label = { Text("select account type") },
@@ -114,32 +115,34 @@ fun createAccountScreen(navController: NavController,username:String,password:St
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         DropdownMenuItem(onClick = {
-                            accountType = "STUDENT"
+                            user_type = "STUDENT"
                             expanded = false
                         }) {
                             Text("Student account")
                         }
                         Divider()
                         DropdownMenuItem(onClick = {
-                            accountType = "STAFF"
+                            user_type = "STAFF"
                             expanded = false
                         }) {
                             Text("staff account")
                         }
                         Divider()
                         DropdownMenuItem(onClick = {
-                            accountType = "ADMIN"
+                            user_type = "ADMIN"
                             expanded = false
                         }) {
                             Text("admin account")
                         }
                     }
+                    Spacer(modifier = Modifier.height(10.dp))
                     commonButton(onClick = {
                         showProgress = true
-                        val account = UserAccount(email, password, accountType, userID)
+                        val account = UserAccount(user_ID = userID, user_type = user_type, username = email,
+                        password = password)
                         viewmodel.CreateAccount(account)
                         viewmodel.feedback.observe(lifeCycleOwner) { response ->
-                            if (response == "success") {
+                            if (response.toString() == "success") {
                                 showProgress = false
                                 navController.navigate("feedback_Screen/$toplabel/$feedback")
                             } else {

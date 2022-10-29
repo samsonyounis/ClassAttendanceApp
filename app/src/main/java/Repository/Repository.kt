@@ -20,7 +20,7 @@ fun AddAccountRequest(request: AccountRequest):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.AuthorizeAttendance(authorization)
     }
     // function to remove class attendance authorization
-    fun DeletAuthorization(classCode: String):Call<String>{
+    fun DeletAuthorization(classCode: String):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.DeleteAuthorization(classCode)
     }
     // function to add single class record

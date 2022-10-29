@@ -16,7 +16,7 @@ fun RecordAttendance(@Body attendance:Attendance):Call<String>
 fun AuthorizeAttendance(@Body authorization:AttendanceAuthorization):Call<String>
 
 @DELETE("deleteAuthorization")
-fun DeleteAuthorization(@Query("classCode") classCode: String):Call<String>
+fun DeleteAuthorization(@Query("classCode") classCode: String):Call<ServerRes>
 
 @POST("class")
 fun AddClass(@Body singleClass:Class):Call<ServerRes>

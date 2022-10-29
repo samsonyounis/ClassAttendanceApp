@@ -18,7 +18,7 @@ class CreateAccountViewModel(private val repository: Repository):ViewModel() {
                     feedback.value = "success"
                 }
                 else{
-                    feedback.value = "failed to create account\n\n${response.code()}"
+                    feedback.value = "failed to create account\n${response.body()?.message}\n${response.code()}"
                 }
             }
 
