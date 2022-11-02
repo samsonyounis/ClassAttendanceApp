@@ -47,6 +47,7 @@ fun addLecturerScreen(navController: NavController){
     val viewmodel = AddStaffViewModel(repository) // instance of viewModel here
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+
     Scaffold(modifier = Modifier.padding(16.dp),
         topBar = {
             topRow(text = "Add lecturer", navController = navController)

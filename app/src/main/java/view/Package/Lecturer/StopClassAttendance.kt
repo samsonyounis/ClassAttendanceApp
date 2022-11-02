@@ -4,10 +4,12 @@ import Repository.Repository
 import ViewModel.StopClassAttendanceViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,6 +29,7 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun StopAttendanceScreen(navController: NavController){
     var classCode by rememberSaveable { mutableStateOf("") }
+    var classCodeError by rememberSaveable { mutableStateOf("") }
     var label by rememberSaveable { mutableStateOf("Enter the class code") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
     var toplabel by rememberSaveable { mutableStateOf("Stop Attendance") }
@@ -77,18 +80,34 @@ fun StopAttendanceScreen(navController: NavController){
                 labelText = label, placeholderText ="" ,
                 keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             )
+            Text(text = classCodeError,
+            color = Color.Red)
 
             commonButton(onClick = {
-                showProgress = true
-                //calling the function in the view model
-                viewmodel.DeleteAuthorization(classCode)
-                viewmodel.feedback.observe(lifeCycleOwner){response->
-                    if (response == "success"){
-                        navController.navigate("feedback_Screen/$toplabel/$feedback" )
-                    }
-                    else{
-                        val encodedResponse = URLEncoder.encode(response,StandardCharsets.UTF_8.toString())
-                        navController.navigate("feedback_Screen/$toplabel/$encodedResponse" )
+                //validating the class code here
+                if (classCode.isBlank()){
+                    classCodeError = "*Class code field is black"
+                }
+                else if (classCode.length<6){
+                    classCodeError = "*class code must consist of 6 Alphanumeric characters"
+                }
+                else if(classCode.length>6){
+                    classCodeError = "*class code can not contain white spaces and must be 6 characters long"
+                }
+                else if (classCode.contains(" ")){
+                    classCodeError = "*Class code can't contain white spaces"
+                }
+                else{
+                    showProgress = true
+                    viewmodel.DeleteAuthorization(classCode.uppercase())
+                    viewmodel.feedback.observe(lifeCycleOwner){response->
+                        if (response == "success"){
+                            navController.navigate("feedback_Screen/$toplabel/$feedback" )
+                        }
+                        else{
+                            val encodedResponse = URLEncoder.encode(response,StandardCharsets.UTF_8.toString())
+                            navController.navigate("feedback_Screen/$toplabel/$encodedResponse" )
+                        }
                     }
                 }
             },

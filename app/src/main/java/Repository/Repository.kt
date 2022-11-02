@@ -16,7 +16,7 @@ fun AddAccountRequest(request: AccountRequest):Call<ServerRes>{
     }
 
     // function to add attendance authorization
-    fun AuthorizeAttenance(authorization: AttendanceAuthorization):Call<String>{
+    fun AuthorizeAttenance(authorization: AttendanceAuthorization):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.AuthorizeAttendance(authorization)
     }
     // function to remove class attendance authorization
@@ -61,5 +61,9 @@ fun AddAccountRequest(request: AccountRequest):Call<ServerRes>{
     // function to login  the users.
     fun LoginUser(loginRequest: LoginRequest):Call<ServerRes>{
         return RetrofitObjInstance.ApiConnect.LoginUser(loginRequest)
+    }
+    // function to recover account
+    fun recoverAccount(request:RecoverAccount):Call<ServerRes>{
+        return RetrofitObjInstance.ApiConnect.recoverAccount(request)
     }
 }

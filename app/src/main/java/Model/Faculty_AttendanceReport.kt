@@ -1,8 +1,8 @@
 package Model
 
 data class Faculty_AttendanceReport(
-    val Stu_RegNo:String,
-    val daysPresent:String,
-    val daysAbsent:String,
-    val totalDays:String
+    val stu_RegNo:String,
+    val stu_name:String,
+    val hoursAttended:String,
+    val totalClassHours:String
 )

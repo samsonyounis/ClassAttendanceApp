@@ -1,10 +1,11 @@
 package Model
 
 data class AttendanceAuthorization(
-    val classCode:String,
-    val lecDeviceID:String,
-    val lecID:String,
-    val classDuration:String,
+    val class_Code:String,
+    val class_Venue:String,
+    val class_Duration:Int,
+    val class_Date:String,
     val week:String,
-    val date:String
+    val lecture_ID:String,
+    val lectureDeviceID:String,
 )

@@ -25,7 +25,7 @@ class AddStaffViewModel(private val repository: Repository):ViewModel() {
             }
 
             override fun onFailure(call: Call<ServerRes>, t: Throwable) {
-                feedback.value = "check connection\n\n${t.message}"
+                feedback.value = "Somthing went wrong with your connection\n\n${t.message}"
             }
 
         })

@@ -1,5 +1,7 @@
 package ViewModel
 
+import Model.AccountRequest
+import Model.RecoverAccount
 import Model.ServerRes
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
@@ -8,23 +10,25 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StopClassAttendanceViewModel(private val repository: Repository):ViewModel() {
+class RecoverAccountViewModel(private val repository: Repository):ViewModel() {
 
-    var feedback:MutableLiveData<String> = MutableLiveData()
+    var feedback: MutableLiveData<String> = MutableLiveData()
 
-    fun DeleteAuthorization(classCode:String){
-        repository.DeletAuthorization(classCode).enqueue(object : Callback<ServerRes>{
+    fun recoverAccount(request: RecoverAccount){
+        repository.recoverAccount(request).enqueue(object: Callback<ServerRes> {
+
             override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
                 if (response.isSuccessful){
                     feedback.value = "success"
                 }
                 else{
-                    feedback.value = "failed to stop class attendance\n${response.body()?.message}\n${response.code()}"
+                    feedback.value = "failed to send request\n${response.body()?.message}\n${response.code()}"
+
                 }
             }
 
             override fun onFailure(call: Call<ServerRes>, t: Throwable) {
-                feedback.value = "something went wrong with your connection\n\n${t.message}"
+                feedback.value = "something went wrong\n ${t.message}"
             }
 
         })

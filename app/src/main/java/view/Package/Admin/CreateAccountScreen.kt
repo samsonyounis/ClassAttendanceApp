@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets
 fun createAccountScreen(navController: NavController,username:String,password:String,accountType:String,
     userID:String) {
     var userID by rememberSaveable { mutableStateOf(userID) }
-    var user_type by rememberSaveable { mutableStateOf(accountType) }
+    var user_type by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf(username) }
     var password by rememberSaveable { mutableStateOf(password) }
 

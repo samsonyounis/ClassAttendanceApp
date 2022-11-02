@@ -30,7 +30,7 @@ class AdminAttendanceReportViewModel(private  val repository: Repository):ViewMo
             }
 
             override fun onFailure(call: Call<List<Faculty_AttendanceReport>>, t: Throwable) {
-                feedback.value = "check connection\n\n${t.message}"
+                feedback.value = "something went wrong with your cnnection\n\n${t.message}"
             }
 
         })

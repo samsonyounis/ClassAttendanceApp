@@ -1,16 +1,8 @@
 package view.Package
 
-import Model.DiscoveredDevices
-import android.Manifest
-import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,13 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import view.Package.ReusableFunctions.topRow
 
@@ -41,8 +28,6 @@ fun studentHomeScreen(navController: NavController){
     var expanded by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val  sessionManager = SessionManager(context) // instance of session Manager
-    // innitailizing the lifeCycle owner of this compose screen
-    val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     val bluetoothManager: BluetoothManager? =
         ContextCompat.getSystemService(context, BluetoothManager::class.java)
     val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.getAdapter()
@@ -93,8 +78,10 @@ fun studentHomeScreen(navController: NavController){
                         else{
                             Toast.makeText(context,"Device supports bluetooth", Toast.LENGTH_LONG).show()
                             if (bluetoothAdapter?.isEnabled == false) {
-                                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                                laucher.launch(enableBtIntent)
+                                val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
+                                    putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+                                }
+                                laucher.launch(discoverableIntent)
                             }
                             navController.navigate("avialableClasses_Screen")
                         }

@@ -1,6 +1,5 @@
 package view.Package.ReusableFunctions
 
-import androidx.compose.runtime.Composable
 
 
 fun loginValidation(userName:String, password:String):String {

@@ -12,11 +12,11 @@ fun AddAccountRequest(@Body request:AccountRequest):Call<ServerRes>
 @POST("/api")
 fun RecordAttendance(@Body attendance:Attendance):Call<String>
 
-@POST("/api")
-fun AuthorizeAttendance(@Body authorization:AttendanceAuthorization):Call<String>
+@POST("attendance/authorize")
+fun AuthorizeAttendance(@Body authorization:AttendanceAuthorization):Call<ServerRes>
 
-@DELETE("deleteAuthorization")
-fun DeleteAuthorization(@Query("classCode") classCode: String):Call<ServerRes>
+@DELETE("attendance/delete/{classCode}")
+fun DeleteAuthorization(@Path("classCode") classCode: String):Call<ServerRes>
 
 @POST("class")
 fun AddClass(@Body singleClass:Class):Call<ServerRes>
@@ -33,15 +33,18 @@ fun AddStudent(@Body student:Student):Call<ServerRes>
 @POST("staff")
  fun AddStaff(@Body staff: Staff):Call<ServerRes>
 
- @GET("/api")
- fun Get_StudentAttendanceReport(@Query("regNo") regNo:String):Call<List<Student_attendanceReport>>
+ @GET("/api/{regNo}")
+ fun Get_StudentAttendanceReport(@Path("regNo") regNo:String):Call<List<Student_attendanceReport>>
 
- @GET("/api")
- fun Get_FacultyAttendanceReport(@Query("classCode") classCode:String):Call<List<Faculty_AttendanceReport>>
+ @GET("/api/{classCode}")
+ fun Get_FacultyAttendanceReport(@Path("classCode") classCode:String):Call<List<Faculty_AttendanceReport>>
 
  @GET("requestAccount")
  fun Get_AccountRequests():Call<List<AccountRequest>>
 
  @POST("userAccounts/login")
  fun LoginUser(@Body loginRequest: LoginRequest):Call<ServerRes>
+
+ @POST("userAccounts/recoverAccount")
+ fun recoverAccount(@Body request:RecoverAccount):Call<ServerRes>
 }

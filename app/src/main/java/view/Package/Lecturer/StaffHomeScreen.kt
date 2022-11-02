@@ -22,7 +22,7 @@ import view.Package.SessionManager
 fun staffHomeScreen(navController: NavController){
     var expanded by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
-    val  sessionManager = SessionManager(context) // instance of session Manager
+    val  sessionManager = SessionManager(context) // instance of session Manager class
 
     Scaffold(
         topBar = {
@@ -56,7 +56,7 @@ fun staffHomeScreen(navController: NavController){
                 ) {
                     Divider()
                     DropdownMenuItem(onClick = {
-                        navController.navigate("authorizeAttendance_Screen")
+                        navController.navigate("AttendanceAuthInput_Screen")
                     }) {
                         Text("Authorize class attendance")
                     }

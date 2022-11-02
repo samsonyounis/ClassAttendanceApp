@@ -25,7 +25,7 @@ class AddClassViewModel(private val repository: Repository):ViewModel() {
 
 
             override fun onFailure(call: Call<ServerRes>, t: Throwable){
-                feedback.value = "something went wrong\n\n${t.message}"
+                feedback.value = "something went wrong with your connection\n\n${t.message}"
             }
 
         })

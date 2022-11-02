@@ -25,7 +25,7 @@ class AddStudentViewModel(private val repository: Repository):ViewModel() {
             }
 
             override fun onFailure(call: Call<ServerRes>, t: Throwable) {
-                feeddback.value = "check connection\n\n${t.message}"
+                feeddback.value = "Something went wrong with your connection\n\n${t.message}"
             }
         })
     }

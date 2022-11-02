@@ -29,6 +29,8 @@ fun feedbackScreen(label:String, feedbackMessage:String, navController: NavContr
             style = MaterialTheme.typography.h2)
 
             commonButton(onClick = {
+                 navController.navigateUp()
+                /*
                  if (sessionManager.fetchUserType() == "student"){
                      navController.popBackStack()
                      navController.navigate("studentHome_Screen")
@@ -41,6 +43,8 @@ fun feedbackScreen(label:String, feedbackMessage:String, navController: NavContr
                     navController.popBackStack()
                     navController.navigate("adminHome_Screen")
                  }
+
+                 */
             }, label = "OK")
         }
     }

@@ -1,6 +1,5 @@
 package Model
 
-import org.jetbrains.annotations.NotNull
 
 data class Student(
     val studentID:String,

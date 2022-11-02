@@ -143,9 +143,17 @@ class MainActivity : ComponentActivity() {
                         ) {
                             viewAccountRequestScreen(navController = navController,viewmodel)
                         }
-                        composable("authorizeAttendance_Screen"
+                        composable("authorizeAttendance_Screen/{classCode}/{classDuration}/{deviceID}",
+                            arguments = listOf(
+                                navArgument("classCode"){type = NavType.StringType},
+                                navArgument("classDuration"){type = NavType.StringType},
+                                navArgument("deviceID"){type = NavType.StringType}
+                            )
                         ) {
-                            authorizeAttendanceScreen(navController = navController)
+                            val classCode = it.arguments?.getString("classCode").toString()
+                            val classDuration = it.arguments?.getString("classDuration").toString()
+                            val deviceID = it.arguments?.getString("deviceID").toString()
+                            authorizeAttendanceScreen(navController = navController,classCode,classDuration,deviceID)
                         }
                         composable("stopAttendance_Screen"
                         ) {
@@ -164,6 +172,10 @@ class MainActivity : ComponentActivity() {
                         composable("avialableClasses_Screen"
                         ) {
                             AvialableClasses(navController = navController)
+                        }
+                        composable("AttendanceAuthInput_Screen"
+                        ) {
+                            input(navController = navController)
                         }
                     }
                 }

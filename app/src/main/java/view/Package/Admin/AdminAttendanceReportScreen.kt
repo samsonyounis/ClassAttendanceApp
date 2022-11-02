@@ -88,13 +88,10 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
                 for (i in attendanceRecords){
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(100.dp)) {
-                        Text(text = i.Stu_RegNo)
-
-                        Text(text = i.daysPresent)
-
-                        Text(text = i.daysAbsent)
-
-                        Text(text = i.totalDays)
+                        Text(text = i.stu_RegNo)
+                        Text(text = i.stu_name)
+                        Text(text = i.hoursAttended)
+                        Text(text = i.totalClassHours)
                     }
                 }
             }

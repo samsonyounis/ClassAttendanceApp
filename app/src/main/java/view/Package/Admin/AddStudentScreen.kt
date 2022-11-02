@@ -2,7 +2,6 @@ package view.Package.Admin
 
 import Model.Student
 import Repository.Repository
-import ViewModel.AddClassViewModel
 import ViewModel.AddStudentViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,7 @@ fun addStudentScreen(navController: NavController){
     var school by rememberSaveable { mutableStateOf("") }
     var department by rememberSaveable { mutableStateOf("") }
     var studentCourse by rememberSaveable { mutableStateOf("") }
+
     var toplabel by rememberSaveable { mutableStateOf("Add student") }
     var feedback by rememberSaveable { mutableStateOf(" Student added successfully") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
@@ -109,7 +109,8 @@ fun addStudentScreen(navController: NavController){
                 commonButton(onClick = {
                     showProgress = true
                     val student = Student(
-                        studentID, studentFirstName, studentMiddleName, studentLastName,school,department, studentCourse,
+                        studentID, studentFirstName, studentMiddleName,
+                        studentLastName,school,department, studentCourse,
                     )
                     viewmodel.AddStudent(student)
                     viewmodel.feeddback.observe(lifeCycleOwner) { response ->

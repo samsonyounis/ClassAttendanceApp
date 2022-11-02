@@ -35,7 +35,7 @@ fun addClassScreen(navController: NavController){
     var classCode by rememberSaveable { mutableStateOf("") }
     var classTitle by rememberSaveable { mutableStateOf("") }
     var classDuration by rememberSaveable { mutableStateOf("") }
-    var classInstructor by rememberSaveable { mutableStateOf("") }
+    var classInstructorID by rememberSaveable { mutableStateOf("") }
 
     var toplabel by rememberSaveable { mutableStateOf("Add class") }
     var feedback by rememberSaveable { mutableStateOf(" Class added successfully") }
@@ -84,8 +84,8 @@ fun addClassScreen(navController: NavController){
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
                 outlinedTextField(
-                    valueText = classInstructor, onValueChange = {classInstructor = it}, isError = false,
-                    labelText = "Class Instructor", placeholderText = "e.g Duncan",
+                    valueText = classInstructorID, onValueChange = {classInstructorID = it}, isError = false,
+                    labelText = "Class Instructor ID", placeholderText = "",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -93,7 +93,7 @@ fun addClassScreen(navController: NavController){
                 commonButton(onClick = {
                     showProgress = true
                     //creating class object
-                    val singleClass = Class(classCode,classTitle,classDuration,classInstructor)
+                    val singleClass = Class(classCode,classTitle,classDuration,classInstructorID)
                     // calling the function in the view model and observing the value
                     viewmodel.AddClass(singleClass)
                     viewmodel.feedback.observe(lifeCycleOwner){response->

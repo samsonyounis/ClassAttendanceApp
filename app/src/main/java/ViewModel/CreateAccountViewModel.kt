@@ -23,7 +23,7 @@ class CreateAccountViewModel(private val repository: Repository):ViewModel() {
             }
 
             override fun onFailure(call: Call<ServerRes>, t: Throwable) {
-                feedback.value = "Check your connection\n\n${t.message}"
+                feedback.value = "Something went wrong with your connection\n\n${t.message}"
             }
 
         })
