@@ -11,8 +11,8 @@ fun AddAccountRequest(request: AccountRequest):Call<ServerRes>{
 }
 
     // function to add single attendance record
-    fun RecordAttendance(attendance: Attendance):Call<String>{
-        return RetrofitObjInstance.ApiConnect.RecordAttendance(attendance)
+    fun RecordAttendance(request: SignAttendanceRequest):Call<ServerRes>{
+        return RetrofitObjInstance.ApiConnect.RecordAttendance(request)
     }
 
     // function to add attendance authorization

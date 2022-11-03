@@ -81,19 +81,19 @@ fun addClassScreen(navController: NavController){
                 outlinedTextField(
                     valueText = classDuration, onValueChange = {classDuration = it}, isError = false,
                     labelText = "Class Duration in hours/semester", placeholderText = "e.g 36",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                    keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
                 )
                 outlinedTextField(
                     valueText = classInstructorID, onValueChange = {classInstructorID = it}, isError = false,
                     labelText = "Class Instructor ID", placeholderText = "",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+                    keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 // onclick listener button
                 commonButton(onClick = {
                     showProgress = true
                     //creating class object
-                    val singleClass = Class(classCode,classTitle,classDuration,classInstructorID)
+                    val singleClass = Class(classCode.uppercase(),classTitle,classDuration,classInstructorID)
                     // calling the function in the view model and observing the value
                     viewmodel.AddClass(singleClass)
                     viewmodel.feedback.observe(lifeCycleOwner){response->

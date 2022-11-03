@@ -1,10 +1,13 @@
 package view.Package
 
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,16 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import view.Package.ReusableFunctions.topRow
 
 @Composable
 fun studentHomeScreen(navController: NavController){
     var expanded by rememberSaveable { mutableStateOf(false) }
+    var stu_DeviceID by rememberSaveable { mutableStateOf("123") }
+    var lec_DeviceID by rememberSaveable { mutableStateOf("AB:30:43:FF:H2") }
     val context = LocalContext.current
     val  sessionManager = SessionManager(context) // instance of session Manager
     val bluetoothManager: BluetoothManager? =
@@ -34,6 +38,8 @@ fun studentHomeScreen(navController: NavController){
 
     val laucher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult(
     )){
+    }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
     }
 
     Scaffold(
@@ -77,13 +83,23 @@ fun studentHomeScreen(navController: NavController){
                         }
                         else{
                             Toast.makeText(context,"Device supports bluetooth", Toast.LENGTH_LONG).show()
+                            //turning on the bluetooth
                             if (bluetoothAdapter?.isEnabled == false) {
-                                val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
-                                    putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+                                //getting the bluetooth hardware address of the student device.
+                                if (ActivityCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.BLUETOOTH_CONNECT
+                                    ) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    stu_DeviceID = bluetoothAdapter.address
                                 }
+                                val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                                 laucher.launch(discoverableIntent)
                             }
-                            navController.navigate("avialableClasses_Screen")
+                            else{
+                                stu_DeviceID = bluetoothAdapter.address
+                            }
+                            navController.navigate("signAttendance_Screen/$stu_DeviceID/$lec_DeviceID")
                         }
 
                     }) {

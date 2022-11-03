@@ -22,6 +22,7 @@ import view.Package.Lecturer.*
 import view.Package.ReusableFunctions.changeSystemBarColors
 import view.Package.ReusableFunctions.loginScreen
 import view.Package.Student.AvialableClasses
+import view.Package.Student.signAttendanceScreen
 import view.Package.ui.theme.Class_Attendance_AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -176,6 +177,18 @@ class MainActivity : ComponentActivity() {
                         composable("AttendanceAuthInput_Screen"
                         ) {
                             input(navController = navController)
+                        }
+                        composable("signAttendance_Screen/{stu_DeviceID}/{lec_DeviceID}",
+                            arguments = listOf(
+                                navArgument("stu_DeviceID"){type = NavType.StringType},
+                                navArgument("lec_DeviceID"){type = NavType.StringType}
+                            )
+                        ) {
+                            val stu_DeviceID = it.arguments?.getString("stu_DeviceID").toString()
+                            val lec_DeviceID = it.arguments?.getString("lec_DeviceID").toString()
+                            signAttendanceScreen(
+                                navController = navController, stu_DeviceID = stu_DeviceID, lec_DeviceID = lec_DeviceID
+                            )
                         }
                     }
                 }

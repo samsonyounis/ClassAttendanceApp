@@ -21,7 +21,7 @@ class RequestAccountViewModel(private val repository: Repository):ViewModel() {
                     response1.value = "success"
                 }
                 else{
-                    response1.value = "${response.body()?.message}\n${response.code()}"
+                    response1.value = " failed to send request\n\n${response.body()?.message}\n${response.code()}"
                     //failed to send request
                     //${response.code()}
                 }

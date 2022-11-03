@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,6 +37,7 @@ fun StopAttendanceScreen(navController: NavController){
     var feedback by rememberSaveable { mutableStateOf("Class attendance closed successfully") }
 
     val repository = Repository() // instance of the repository
+    val context = LocalContext.current
     val viewmodel = StopClassAttendanceViewModel(repository) // instance of viewModel
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current

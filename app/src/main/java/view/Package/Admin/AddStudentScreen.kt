@@ -3,10 +3,7 @@ package view.Package.Admin
 import Model.Student
 import Repository.Repository
 import ViewModel.AddStudentViewModel
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -65,7 +62,8 @@ fun addStudentScreen(navController: NavController){
         ProvideWindowInsets {
             Column(modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp).navigationBarsWithImePadding()
+                .padding(top = 20.dp)
+                .navigationBarsWithImePadding()
                 .verticalScroll(
                     rememberScrollState()
                 ),
@@ -106,6 +104,7 @@ fun addStudentScreen(navController: NavController){
                     labelText = "Student's Course", placeholderText = "e.g BIT",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 commonButton(onClick = {
                     showProgress = true
                     val student = Student(

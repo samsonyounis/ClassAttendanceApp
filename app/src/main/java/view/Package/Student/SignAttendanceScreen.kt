@@ -1,13 +1,16 @@
-package view.Package
+package view.Package.Student
 
-import Model.Enrollment
-import Model.EnrollmentID
+import Model.SignAttendanceRequest
 import Repository.Repository
-import ViewModel.EnrollmentViewModel
+import ViewModel.SignAttendnaceViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,28 +35,28 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun enrollmentScreen(navController: NavController){
+fun signAttendanceScreen(navController: NavController,stu_DeviceID:String,lec_DeviceID:String){
     var studentID by rememberSaveable { mutableStateOf("") }
+    var stu_FirstName by rememberSaveable { mutableStateOf("") }
+    var stu_LastName by rememberSaveable { mutableStateOf("") }
     var classCode by rememberSaveable { mutableStateOf("") }
-    var firstName by rememberSaveable { mutableStateOf("") }
-    var middleName by rememberSaveable { mutableStateOf("") }
-    var lastName by rememberSaveable { mutableStateOf("") }
-    var email by rememberSaveable { mutableStateOf("") }
+    var stu_DeviceID by rememberSaveable { mutableStateOf(stu_DeviceID) }
+    var lec_DeviceID by rememberSaveable { mutableStateOf(lec_DeviceID) }
 
     var toplabel by rememberSaveable { mutableStateOf("Enrollment") }
     var feedback by rememberSaveable { mutableStateOf("Successfully enrolled") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
 
     val repository = Repository() // instance of the repository
-    val viewmodel = EnrollmentViewModel(repository) // instance of the viewModel
+    val viewmodel = SignAttendnaceViewModel(repository) // instance of the viewModel
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
     Scaffold(modifier = Modifier.padding(16.dp),
-    topBar = {
-        topRow(text = "Enrollment", navController = navController)
-    }) {
-        // showing the circular progress
+        topBar = {
+            topRow(text = "Sign attendnace", navController = navController)
+        }) {
+        // showing the circular progress while adding the attendnace record
         if (showProgress == true) {
             Dialog(onDismissRequest = { showProgress == true }) {
                 circularProgress(showProgress = showProgress)
@@ -73,6 +76,16 @@ fun enrollmentScreen(navController: NavController){
                 outlinedTextField(
                     valueText = studentID, onValueChange = { studentID = it }, isError = false,
                     labelText = "registration number", placeholderText = "",
+                    keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+                )
+                outlinedTextField(
+                    valueText = stu_FirstName, onValueChange = { stu_FirstName = it }, isError = false,
+                    labelText = "First name", placeholderText = "",
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                )
+                outlinedTextField(
+                    valueText = stu_LastName, onValueChange = { stu_LastName = it }, isError = false,
+                    labelText = "Last name", placeholderText = "",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
                 outlinedTextField(
@@ -80,39 +93,43 @@ fun enrollmentScreen(navController: NavController){
                     labelText = "Class code", placeholderText = "e.g SIT400",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
+                Column {
+                    Text(text = "Student device ID")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(value = stu_DeviceID, onValueChange = {stu_DeviceID = it},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                        isError = false,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp), enabled = false, readOnly = true
+                    )
+                }
+                Column {
+                    Text(text = "Lecturer device ID")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(value = lec_DeviceID, onValueChange = {lec_DeviceID = it},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        isError = false,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp), enabled = false, readOnly = true
+                    )
+                }
 
-                outlinedTextField(
-                    valueText = firstName, onValueChange = { firstName = it }, isError = false,
-                    labelText = "First name", placeholderText = "",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-                )
-                outlinedTextField(
-                    valueText = middleName, onValueChange = { middleName = it }, isError = false,
-                    labelText = "Middle name", placeholderText = "",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-                )
-
-                outlinedTextField(
-                    valueText = lastName, onValueChange = { lastName = it }, isError = false,
-                    labelText = "Last name", placeholderText = "",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-                )
-
-                outlinedTextField(
-                    valueText = email, onValueChange = { email = it }, isError = false,
-                    labelText = "Email Address", placeholderText = "",
-                    keyboardType = KeyboardType.Email, imeAction = ImeAction.Done
-                )
                 Spacer(modifier = Modifier.height(10.dp))
                 //onclick listener button
                 commonButton(
                     onClick = {
                         showProgress = true
-                        // creating the enrollmentID object and the enrollment Object
-                        val enrollmentID = EnrollmentID(studentID,classCode)
-                        val enrollment = Enrollment(enrollmentID,firstName,middleName,lastName,email)
+                        // creating the sign atendance request object
+                        val request = SignAttendanceRequest(studentID,classCode,stu_FirstName,
+                            stu_FirstName,stu_DeviceID,lec_DeviceID)
                         // calling the function in the view model and observing th value
-                        viewmodel.AddEnrollment(enrollment)
+                        viewmodel.recordAttendance(request)
                         viewmodel.feedback.observe(lifeCycleOwner){response->
                             if (response == "success"){
                                 showProgress = false
@@ -123,10 +140,10 @@ fun enrollmentScreen(navController: NavController){
                                 val encodedResponse = URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
                                 navController.navigate("feedback_Screen/$toplabel/$encodedResponse" )
                             }
-                            }
                         }
-                        ,
-                    label = "Enroll"
+                    }
+                    ,
+                    label = "Sign"
                 )
             }
         }

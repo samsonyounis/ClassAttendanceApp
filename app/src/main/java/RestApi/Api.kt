@@ -10,7 +10,7 @@ interface Api {
 fun AddAccountRequest(@Body request:AccountRequest):Call<ServerRes>
 
 @POST("/api")
-fun RecordAttendance(@Body attendance:Attendance):Call<String>
+fun RecordAttendance(@Body request:SignAttendanceRequest):Call<ServerRes>
 
 @POST("attendance/authorize")
 fun AuthorizeAttendance(@Body authorization:AttendanceAuthorization):Call<ServerRes>
