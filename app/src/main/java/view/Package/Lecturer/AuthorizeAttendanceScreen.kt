@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -48,8 +49,12 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
     var instructorID by rememberSaveable { mutableStateOf("") }
     var instructorDeviceID by rememberSaveable { mutableStateOf(deviceID) }
 
-    var toplabel by rememberSaveable { mutableStateOf("Attendance authorization") }
-    var feedback by rememberSaveable {  mutableStateOf("Authorization done succesfully") }
+    var classVenueError by rememberSaveable { mutableStateOf("") }
+    var weekError by rememberSaveable { mutableStateOf("") }
+    var instructorIDError by rememberSaveable { mutableStateOf("") }
+
+    val toplabel by rememberSaveable { mutableStateOf("Attendance authorization") }
+    val feedback by rememberSaveable {  mutableStateOf("Authorization done succesfully") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
     val repository = Repository()
     val viewmodel = AttendanceAuthorizationViewModel(repository)
@@ -63,7 +68,6 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_PAUSE) {
                 showProgress = false
-            } else if (event == Lifecycle.Event.ON_STOP) {
             }
         }
         // Add the observer to the lifecycle
@@ -114,6 +118,7 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
                     labelText = "Class venue", placeholderText = "",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
+                Text(text = classVenueError, color = Color.Red)
                 Column {
                     Text(text = "class Duration")
                     Spacer(modifier = Modifier.height(8.dp))
@@ -145,12 +150,14 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
                     labelText = "Semester week", placeholderText = "e.g 4",
                     keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
                 )
+                Text(text = weekError, color = Color.Red)
 
                 outlinedTextField(
                     valueText = instructorID, onValueChange = { instructorID = it}, isError = false,
-                    labelText = "Staff ID", placeholderText = "e.g 62314",
+                    labelText = "Staff ID", placeholderText = "",
                     keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
                 )
+                Text(text = instructorIDError, color = Color.Red)
                 Column() {
                     Text(text = "Device ID")
                     Spacer(modifier = Modifier.height(8.dp))
@@ -166,21 +173,46 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 commonButton(onClick = {
-                    showProgress = true
-                    val authorization = AttendanceAuthorization(
-                        classCode,classVenue,classDuration.toInt(),classDate,week,instructorID,instructorDeviceID)
-                    viewmodel.addAuthorization(authorization)
-                    viewmodel.feedback.observe(lifeCycleOwner){response->
-                        if (response == "success"){
-                            navController.navigate("feedback_Screen/$toplabel/$feedback" )
-                        }
-                        else{
-                            val encodedResponse =
-                                URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
-                            showProgress = false
-                            navController.navigate("feedback_Screen/$toplabel/$encodedResponse")
-                        }
+                    //validating inputs here
+                    if(classVenue.isBlank()){
+                        classVenueError = "* class venue field is required"
+                        weekError = ""; instructorIDError = ""
+                    }
+                    else if (week.isBlank()){
+                        weekError = "* specify the semester week"
+                        classVenueError = ""; instructorIDError = ""
+                    }
+                    else if (week.toInt()<1){
+                        weekError = "* semester week can not be less than one"
+                        classVenueError = ""; instructorIDError = ""
+                    }
+                    else if (instructorID.isBlank()){
+                        instructorIDError = "*staff ID field is required"
+                        classVenueError = ""; weekError = ""
+                    }
+                    else if (instructorID.length<3 || instructorID.length>3){
+                        instructorIDError = "* staff ID must be 3 digits long"
+                        classVenueError = ""; weekError = ""
+                    }
+                    else{
+                        classVenueError = ""; weekError = ""; instructorIDError = ""
+                        showProgress = true
+                        val authorization = AttendanceAuthorization(
+                            classCode.uppercase(),classVenue.uppercase(),classDuration.toInt(),
+                            classDate,week,instructorID,instructorDeviceID)
+                        viewmodel.addAuthorization(authorization)
+                        viewmodel.feedback.observe(lifeCycleOwner){response->
+                            if (response == "success"){
+                                navController.navigate("feedback_Screen/$toplabel/$feedback" )
+                            }
+                            else{
+                                val encodedResponse =
+                                    URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
+                                showProgress = false
+                                navController.navigate("feedback_Screen/$toplabel/$encodedResponse")
+                            }
 
+                        }
                     }
                     },
                     label = "Authorize")

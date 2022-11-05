@@ -43,6 +43,7 @@ fun input(navController: NavController){
     var classCode by rememberSaveable { mutableStateOf("") }
     var classDuration by rememberSaveable { mutableStateOf("") }
     var instructorDeviceID by rememberSaveable { mutableStateOf("123") }
+
     var classCodeError by rememberSaveable { mutableStateOf("") }
     var classDurationError by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
@@ -53,7 +54,6 @@ fun input(navController: NavController){
 
     val laucher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult(
     )){
-
     }
 
     Scaffold(
@@ -97,38 +97,34 @@ fun input(navController: NavController){
                     //validating the inputs here
                     if (classCode.isBlank()){
                         classCodeError = "*Class code field is black"
+                        classDurationError = ""
                     }
-                    else if (classCode.length<6){
-                        classCodeError = "*class code must consist of 6 Alphanumeric characters"
+                    else if (classCode.length<6 || classCode.length>6 || classCode.contains(" ")){
+                        classCodeError = "*class code must be 6 alphanumeric characters long with no white spaecs"
+                        classDurationError = ""
                     }
-                    else if(classCode.length>6){
-                        classCodeError = "*class code can not contain white spaces and must be 6 characters long"
-                    }
-                    else if (classCode.contains(" ")){
-                        classCodeError = "*Class code can't contain white spaces"
-                    }
-
                     else if (classDuration.isBlank()){
                         classDurationError = "*class duration field is black"
+                        classCodeError = ""
                     }
                     else if (classDuration.toInt()<=0){
                         classDurationError = "class duration can not be less than one hour"
+                        classCodeError = ""
                     }
                     else if (classDuration.toInt()>=4){
                         classDurationError = "class duration can not be more than 3 hours"
+                        classCodeError = ""
                     }
                     else{
+                        classCodeError = ""; classDurationError = ""
                         //if bluetooth adapter is null
                         if (bluetoothAdapter == null) {
                             Toast.makeText(context,"Device does not support bluetooth", Toast.LENGTH_LONG).show()
                         }
                         else{
-                            // toasting the message
-                            Toast.makeText(context,"Device supports bluetooth", Toast.LENGTH_LONG).show()
                             //checking if the bluetooth is enabled or not
                             if (bluetoothAdapter?.isEnabled == false) {
                                 // starting the intent to enable bluetooth
-                                val value = classDuration.toInt()
                                 //checking if theses permission are allowed in manifest file.
                                 if (ActivityCompat.checkSelfPermission(
                                         context,

@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,6 +42,12 @@ fun createAccountScreen(navController: NavController,username:String,password:St
     var user_type by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf(username) }
     var password by rememberSaveable { mutableStateOf(password) }
+
+    var userIdError by rememberSaveable { mutableStateOf("") }
+    var emailError by rememberSaveable { mutableStateOf("") }
+    var passwordError by rememberSaveable { mutableStateOf("") }
+    var usertypeError by rememberSaveable { mutableStateOf("") }
+
 
     var toplabel by rememberSaveable { mutableStateOf("Create account") }
     var feedback by rememberSaveable { mutableStateOf(" Accout created successfully") }
@@ -81,18 +88,21 @@ fun createAccountScreen(navController: NavController,username:String,password:St
                 outlinedTextField(
                     valueText = userID, onValueChange = { userID = it }, isError = false,
                     labelText = "User ID i.e Student ID/Staff ID", placeholderText = "",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+                    keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
                 )
-                outlinedTextField(
-                    valueText = email, onValueChange = { email = it }, isError = false,
-                    labelText = "User email", placeholderText = "e.g. john@gmail.com",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-                )
+                Text(text = userIdError, color = Color.Red)
+                    outlinedTextField(
+                        valueText = email, onValueChange = { email = it }, isError = false,
+                        labelText = "User email", placeholderText = "e.g. john@gmail.com",
+                        keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                    )
+                Text(text = emailError, color = Color.Red)
                 outlinedTextField(
                     valueText = password, onValueChange = { password = it }, isError = false,
                     labelText = "Password", placeholderText = "e.g @384.dojfifi",
                     keyboardType = KeyboardType.Password, imeAction = ImeAction.Next
                 )
+                Text(text = passwordError, color = Color.Red)
 // with icon and not expanded
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -108,6 +118,7 @@ fun createAccountScreen(navController: NavController,username:String,password:St
                                 Modifier.clickable { expanded = !expanded })
                         }, readOnly = true
                     )
+                    Text(text = usertypeError, color = Color.Red)
                     // drop down menu to select from
                     DropdownMenu(
                         expanded = expanded,
@@ -137,21 +148,54 @@ fun createAccountScreen(navController: NavController,username:String,password:St
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     commonButton(onClick = {
-                        showProgress = true
-                        val account = UserAccount(user_ID = userID, user_type = user_type, username = email,
-                        password = password)
-                        viewmodel.CreateAccount(account)
-                        viewmodel.feedback.observe(lifeCycleOwner) { response ->
-                            if (response.toString() == "success") {
-                                showProgress = false
-                                navController.navigate("feedback_Screen/$toplabel/$feedback")
-                            } else {
-                                val encodedResponse =
-                                    URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
-                                showProgress = false
-                                navController.navigate("feedback_Screen/$toplabel/$encodedResponse")
+                        //validating the inputs here
+                        if (userID.isBlank()){
+                            userIdError = "* user ID required"
+                            usertypeError = ""; emailError = ""; passwordError = ""
+                        }
+                        else if (userID.length<3 || userID.length>3){
+                            userIdError = "* user ID must be 3 digits long"
+                            usertypeError = ""; emailError = ""; passwordError = ""
+                        }
+                        else if (user_type.isBlank()){
+                            usertypeError = "* specify the user type"
+                            userIdError = ""; emailError = ""; passwordError = ""
+                        }
+                        else if (email.isBlank()){
+                            emailError = "* Email is required"
+                            userIdError = ""; usertypeError = ""; passwordError = ""
+                        }
+                        else if (!email.contains("@")){
+                            emailError = "* invalid email format"
+                            userIdError = ""; usertypeError = ""; passwordError = ""
+                        }
+                        else if(password.isBlank()){
+                            passwordError = "set password for this account"
+                            userIdError = ""; usertypeError = ""; emailError = ""
+                        }
+                        else if(password.length<6){
+                            passwordError = "* weak password. it should be atleast 6 characters long"
+                            userIdError = ""; usertypeError = ""; emailError = ""
+                        }
+                        else{
+                            userIdError = ""; usertypeError = ""; emailError = ""; passwordError = ""
+                            showProgress = true
+                            val account = UserAccount(user_ID = userID, user_type = user_type, username = email,
+                                password = password)
+                            viewmodel.CreateAccount(account)
+                            viewmodel.feedback.observe(lifeCycleOwner) { response ->
+                                if (response.toString() == "success") {
+                                    showProgress = false
+                                    navController.navigate("feedback_Screen/$toplabel/$feedback")
+                                } else {
+                                    val encodedResponse =
+                                        URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
+                                    showProgress = false
+                                    navController.navigate("feedback_Screen/$toplabel/$encodedResponse")
+                                }
                             }
                         }
+
                     },
                         label = "Create Account")
                 }

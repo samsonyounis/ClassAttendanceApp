@@ -21,8 +21,8 @@ import view.Package.Admin.*
 import view.Package.Lecturer.*
 import view.Package.ReusableFunctions.changeSystemBarColors
 import view.Package.ReusableFunctions.loginScreen
-import view.Package.Student.AvialableClasses
-import view.Package.Student.signAttendanceScreen
+import view.Package.student.AvialableClasses
+import view.Package.student.signAttendanceScreen
 import view.Package.ui.theme.Class_Attendance_AppTheme
 
 class MainActivity : ComponentActivity() {

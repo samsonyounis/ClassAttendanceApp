@@ -90,14 +90,8 @@ fun StopAttendanceScreen(navController: NavController){
                 if (classCode.isBlank()){
                     classCodeError = "*Class code field is black"
                 }
-                else if (classCode.length<6){
-                    classCodeError = "*class code must consist of 6 Alphanumeric characters"
-                }
-                else if(classCode.length>6){
-                    classCodeError = "*class code can not contain white spaces and must be 6 characters long"
-                }
-                else if (classCode.contains(" ")){
-                    classCodeError = "*Class code can't contain white spaces"
+                else if (classCode.length<6 || classCode.length>6 || classCode.contains(" ")){
+                    classCodeError = "* class code must be 6 alphanumeric long with no white spaces"
                 }
                 else{
                     showProgress = true

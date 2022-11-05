@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets
 fun adminHomeScreen(navController: NavController){
     var expanded by rememberSaveable { mutableStateOf(false) }
     var username by rememberSaveable { mutableStateOf("egsamgmailcom") }
-    var password by rememberSaveable { mutableStateOf("e.g. 57tygjg") }
+    var password by rememberSaveable { mutableStateOf("123") }
     var accountType by rememberSaveable { mutableStateOf("student account") }
     var userID by rememberSaveable { mutableStateOf("j31/4532/2018") }
     val context = LocalContext.current

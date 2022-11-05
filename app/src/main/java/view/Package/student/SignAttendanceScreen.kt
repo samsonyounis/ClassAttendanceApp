@@ -1,4 +1,4 @@
-package view.Package.Student
+package view.Package.student
 
 import Model.SignAttendanceRequest
 import Repository.Repository
@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,6 +43,11 @@ fun signAttendanceScreen(navController: NavController,stu_DeviceID:String,lec_De
     var classCode by rememberSaveable { mutableStateOf("") }
     var stu_DeviceID by rememberSaveable { mutableStateOf(stu_DeviceID) }
     var lec_DeviceID by rememberSaveable { mutableStateOf(lec_DeviceID) }
+
+    var studentIdError by rememberSaveable { mutableStateOf("") }
+    var firstnameError by rememberSaveable { mutableStateOf("") }
+    var lastnameError by rememberSaveable { mutableStateOf("") }
+    var classCodeError by rememberSaveable { mutableStateOf("") }
 
     var toplabel by rememberSaveable { mutableStateOf("Enrollment") }
     var feedback by rememberSaveable { mutableStateOf("Successfully enrolled") }
@@ -78,21 +84,25 @@ fun signAttendanceScreen(navController: NavController,stu_DeviceID:String,lec_De
                     labelText = "registration number", placeholderText = "",
                     keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
                 )
+                Text(text = studentIdError, color = Color.Red)
                 outlinedTextField(
                     valueText = stu_FirstName, onValueChange = { stu_FirstName = it }, isError = false,
                     labelText = "First name", placeholderText = "",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
+                Text(text = firstnameError, color = Color.Red)
                 outlinedTextField(
                     valueText = stu_LastName, onValueChange = { stu_LastName = it }, isError = false,
                     labelText = "Last name", placeholderText = "",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
+                Text(text = lastnameError, color = Color.Red)
                 outlinedTextField(
                     valueText = classCode, onValueChange = { classCode = it }, isError = false,
                     labelText = "Class code", placeholderText = "e.g SIT400",
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
+                Text(text = classCodeError, color = Color.Red)
                 Column {
                     Text(text = "Student device ID")
                     Spacer(modifier = Modifier.height(8.dp))
@@ -124,21 +134,58 @@ fun signAttendanceScreen(navController: NavController,stu_DeviceID:String,lec_De
                 //onclick listener button
                 commonButton(
                     onClick = {
-                        showProgress = true
-                        // creating the sign atendance request object
-                        val request = SignAttendanceRequest(studentID,classCode,stu_FirstName,
-                            stu_FirstName,stu_DeviceID,lec_DeviceID)
-                        // calling the function in the view model and observing th value
-                        viewmodel.recordAttendance(request)
-                        viewmodel.feedback.observe(lifeCycleOwner){response->
-                            if (response == "success"){
-                                showProgress = false
-                                navController.navigate("feedback_Screen/$toplabel/$feedback" )
-                            }
-                            else{
-                                showProgress = false
-                                val encodedResponse = URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
-                                navController.navigate("feedback_Screen/$toplabel/$encodedResponse" )
+                        //validating the user inputs here
+                        if (studentID.isBlank()){
+                            studentIdError ="* student ID is required"
+                            firstnameError = ""; lastnameError = ""; classCodeError = ""
+                        }
+                        else if (studentID.length<3 || studentID.length>3){
+                            studentIdError = "* student ID must be 3 digits long"
+                            firstnameError = ""; lastnameError = ""; classCodeError = ""
+                        }
+                        else if(stu_FirstName.isBlank()){
+                            firstnameError = "* first name required"
+                            studentIdError = ""; lastnameError = ""; classCodeError = ""
+                        }
+                        else if (!stu_FirstName.substring(0,1).matches("[a-zA-Z]".toRegex())){
+                            firstnameError = "* name can not start with numbers, symbols or white spaces"
+                            studentIdError = ""; lastnameError = ""; classCodeError = ""
+                        }
+                        else if(stu_LastName.isBlank()){
+                            lastnameError = "* last name is required"
+                            studentIdError = ""; firstnameError = ""; classCodeError = ""
+                        }
+                        else if (!stu_LastName.substring(0,1).matches("[a-zA-Z]".toRegex())){
+                            lastnameError = "* name can not start with numbers, symbols or white spaces"
+                            studentIdError = ""; firstnameError = ""; classCodeError = ""
+                        }
+                        else if(classCode.isBlank()){
+                            classCodeError = "* class code field is blank"
+                            studentIdError = ""; firstnameError = ""; lastnameError = ""
+                        }
+                        else if (classCode.length<6 || classCode.length>6 || classCode.contains(" ")){
+                            classCodeError = "* class code must be 6 alphanumeric long with no white spaecs"
+                            studentIdError = ""; firstnameError = ""; lastnameError = ""
+                        }
+                        else
+                        {
+                            studentIdError = ""; firstnameError = ""; lastnameError = ""; classCodeError = ""
+                            showProgress = true
+                            // creating the sign atendance request object
+                            val request = SignAttendanceRequest(studentID,classCode.uppercase(),stu_FirstName,
+                                stu_FirstName,stu_DeviceID,lec_DeviceID)
+                            // calling the function in the view model and observing th value
+                            viewmodel.recordAttendance(request)
+                            viewmodel.feedback.observe(lifeCycleOwner){response->
+                                if (response == "success"){
+                                    showProgress = false
+                                    navController.navigate("feedback_Screen/$toplabel/$feedback" )
+                                }
+                                else{
+                                    showProgress = false
+                                    val encodedResponse = URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
+                                    navController.navigate("feedback_Screen/$toplabel/$encodedResponse" )
+                                }
                             }
                         }
                     }

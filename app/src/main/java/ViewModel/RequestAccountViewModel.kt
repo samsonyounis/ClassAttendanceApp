@@ -28,7 +28,7 @@ class RequestAccountViewModel(private val repository: Repository):ViewModel() {
             }
 
             override fun onFailure(call: Call<ServerRes>, t: Throwable) {
-                response1.value = t.message
+                response1.value = "something went wrong with your connection ${t.message}"
             }
 
         })

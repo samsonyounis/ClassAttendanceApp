@@ -5,6 +5,7 @@ import RestApi.RetrofitObjInstance
 import retrofit2.Call
 
 class Repository {
+
     // function to add account request
 fun AddAccountRequest(request: AccountRequest):Call<ServerRes>{
     return RetrofitObjInstance.ApiConnect.AddAccountRequest(request)

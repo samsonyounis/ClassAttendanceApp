@@ -1,6 +1,5 @@
 package view.Package
 
-import Model.AccountRequest
 import Model.Student_attendanceReport
 import ViewModel.StudentAttendanceReportViewModel
 import androidx.compose.foundation.horizontalScroll
@@ -71,17 +70,10 @@ fun StudentAttendanceReportScreen(navController: NavController,regNo:String,
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(text = "Class code",
-                style = MaterialTheme.typography.h2)
-
-                Text(text = "Days present",
-                    style = MaterialTheme.typography.h2)
-
-                Text(text = "Days absent",
-                    style = MaterialTheme.typography.h2)
-
-                Text(text = "Total days",
-                    style = MaterialTheme.typography.h2)
+                Text(text = "Class code", style = MaterialTheme.typography.h2)
+                Text(text = "Student name", style = MaterialTheme.typography.h2)
+                Text(text = "Hours attended", style = MaterialTheme.typography.h2)
+                Text(text = "Total class hours", style = MaterialTheme.typography.h2)
             }
             if(!attendanceRecords.isEmpty()){
                 for (i in attendanceRecords){
@@ -100,28 +92,6 @@ fun StudentAttendanceReportScreen(navController: NavController,regNo:String,
             else{
                 Text(text = serverRes)
             }
-            /*
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(100.dp)) {
-                Text(text = "SIT400")
-
-                Text(text = "20")
-
-                Text(text = "10")
-
-                Text(text = "40")
-            }
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(100.dp)) {
-                Text(text = "SIT402")
-
-                Text(text = "100")
-
-                Text(text = "5")
-
-                Text(text = "40")
-            }
-            */
         }
     }
 }

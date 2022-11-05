@@ -23,8 +23,8 @@ import view.Package.ReusableFunctions.topRow
 fun SpecifyAdminAttendanceReportScreen(navController: NavController){
     var classCode by rememberSaveable { mutableStateOf("") }
     var classCodeError by rememberSaveable { mutableStateOf("") }
-    var label by rememberSaveable { mutableStateOf("Enter class code") }
-    var topLabel by rememberSaveable { mutableStateOf("Class Attendance Report") }
+    val label by rememberSaveable { mutableStateOf("Enter class code") }
+    val topLabel by rememberSaveable { mutableStateOf("Class Attendance Report") }
     Scaffold(modifier = Modifier.padding(16.dp),
         topBar = {
             topRow(text =topLabel , navController = navController)
@@ -46,14 +46,8 @@ fun SpecifyAdminAttendanceReportScreen(navController: NavController){
                 if (classCode.isBlank()){
                     classCodeError = "*Class code field is black"
                 }
-                else if (classCode.length<6){
-                    classCodeError = "*class code must consist of 6 Alphanumeric characters"
-                }
-                else if(classCode.length>6){
-                    classCodeError = "*class code can not contain white spaces and must be 6 characters long"
-                }
-                else if (classCode.contains(" ")){
-                    classCodeError = "*Class code can't contain white spaces"
+                else if (classCode.length<6 || classCode.length>6 || classCode.contains(" ")){
+                    classCodeError = "*class code must be 6 alphanumeric characters long with no white spaecs"
                 }
                 else
                 {

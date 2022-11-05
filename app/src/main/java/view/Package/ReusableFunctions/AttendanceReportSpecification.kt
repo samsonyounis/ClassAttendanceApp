@@ -42,11 +42,8 @@ fun getAttendanceSpecification(navController: NavController, topLabel:String){
                if (regNo.isBlank()){
                    regNoError = "*Registration number field is blank"
                }
-               else if (regNo.length>6){
-                   regNoError = "Registration number can not be more than 6 digits"
-               }
-               else if (regNo.length<6){
-                   regNoError = "*Rigistration number must be 6 digits long"
+               else if (regNo.length<3 || regNo.length>3){
+                   regNoError = "Registration number must be 3 digits long"
                }
                else
                {

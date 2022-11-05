@@ -5,9 +5,9 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.provider.Settings.ACTION_BLUETOOTH_SETTINGS
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -35,11 +35,8 @@ fun studentHomeScreen(navController: NavController){
     val bluetoothManager: BluetoothManager? =
         ContextCompat.getSystemService(context, BluetoothManager::class.java)
     val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.getAdapter()
-
     val laucher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult(
     )){
-    }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
     }
 
     Scaffold(
@@ -94,11 +91,13 @@ fun studentHomeScreen(navController: NavController){
                                     stu_DeviceID = bluetoothAdapter.address
                                 }
                                 val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                                val intent = Intent(ACTION_BLUETOOTH_SETTINGS)
                                 laucher.launch(discoverableIntent)
                             }
                             else{
                                 stu_DeviceID = bluetoothAdapter.address
                             }
+                            //navController.navigate("avialableClasses_Screen")
                             navController.navigate("signAttendance_Screen/$stu_DeviceID/$lec_DeviceID")
                         }
 
