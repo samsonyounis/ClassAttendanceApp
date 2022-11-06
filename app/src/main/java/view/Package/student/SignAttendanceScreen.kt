@@ -36,11 +36,11 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun signAttendanceScreen(navController: NavController,stu_DeviceID:String,lec_DeviceID:String){
+fun signAttendance_Screen(navController: NavController,classCode:String,lec_DeviceID:String,stu_DeviceID:String){
     var studentID by rememberSaveable { mutableStateOf("") }
     var stu_FirstName by rememberSaveable { mutableStateOf("") }
     var stu_LastName by rememberSaveable { mutableStateOf("") }
-    var classCode by rememberSaveable { mutableStateOf("") }
+    var classCode by rememberSaveable { mutableStateOf(classCode) }
     var stu_DeviceID by rememberSaveable { mutableStateOf(stu_DeviceID) }
     var lec_DeviceID by rememberSaveable { mutableStateOf(lec_DeviceID) }
 
@@ -97,12 +97,20 @@ fun signAttendanceScreen(navController: NavController,stu_DeviceID:String,lec_De
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
                 Text(text = lastnameError, color = Color.Red)
-                outlinedTextField(
-                    valueText = classCode, onValueChange = { classCode = it }, isError = false,
-                    labelText = "Class code", placeholderText = "e.g SIT400",
-                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
-                )
-                Text(text = classCodeError, color = Color.Red)
+                Column {
+                    Text(text = "Class code")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(value = classCode, onValueChange = {classCode = it},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        isError = false,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp), enabled = false, readOnly = true
+                    )
+                }
+
                 Column {
                     Text(text = "Student device ID")
                     Spacer(modifier = Modifier.height(8.dp))
@@ -158,14 +166,6 @@ fun signAttendanceScreen(navController: NavController,stu_DeviceID:String,lec_De
                         else if (!stu_LastName.substring(0,1).matches("[a-zA-Z]".toRegex())){
                             lastnameError = "* name can not start with numbers, symbols or white spaces"
                             studentIdError = ""; firstnameError = ""; classCodeError = ""
-                        }
-                        else if(classCode.isBlank()){
-                            classCodeError = "* class code field is blank"
-                            studentIdError = ""; firstnameError = ""; lastnameError = ""
-                        }
-                        else if (classCode.length<6 || classCode.length>6 || classCode.contains(" ")){
-                            classCodeError = "* class code must be 6 alphanumeric long with no white spaecs"
-                            studentIdError = ""; firstnameError = ""; lastnameError = ""
                         }
                         else
                         {

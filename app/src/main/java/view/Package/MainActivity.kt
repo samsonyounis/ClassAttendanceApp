@@ -4,9 +4,12 @@ import Repository.Repository
 import ViewModel.AdminAttendanceReportViewModel
 import ViewModel.StudentAttendanceReportViewModel
 import ViewModel.ViewAccountRequestViewModel
+import android.content.IntentSender
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -21,8 +24,7 @@ import view.Package.Admin.*
 import view.Package.Lecturer.*
 import view.Package.ReusableFunctions.changeSystemBarColors
 import view.Package.ReusableFunctions.loginScreen
-import view.Package.student.AvialableClasses
-import view.Package.student.signAttendanceScreen
+import view.Package.student.*
 import view.Package.ui.theme.Class_Attendance_AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +38,8 @@ class MainActivity : ComponentActivity() {
     val StudentReportViewModel = StudentAttendanceReportViewModel(repository)
     //instance of admin attendance report viewModel
     val AdminReportViewModel = AdminAttendanceReportViewModel(repository)
+  // lateinit var companionDeviceManager:CompanionDeviceManager
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -170,25 +174,27 @@ class MainActivity : ComponentActivity() {
                             val feedbackMsg = it.arguments?.getString("feedbackMsg").toString()
                             FeedbackScreen(label, feedbackMsg, navController = navController)
                         }
-                        composable("avialableClasses_Screen"
-                        ) {
-                            AvialableClasses(navController = navController)
-                        }
                         composable("AttendanceAuthInput_Screen"
                         ) {
                             input(navController = navController)
                         }
-                        composable("signAttendance_Screen/{stu_DeviceID}/{lec_DeviceID}",
+                        composable("signAttendance_Screen/{classCode}/{lec_DeviceID}/{stu_DeviceID}",
                             arguments = listOf(
+                                navArgument("classCode"){type = NavType.StringType},
+                                navArgument("lec_DeviceID"){type = NavType.StringType},
                                 navArgument("stu_DeviceID"){type = NavType.StringType},
-                                navArgument("lec_DeviceID"){type = NavType.StringType}
                             )
                         ) {
-                            val stu_DeviceID = it.arguments?.getString("stu_DeviceID").toString()
+                            val classCode = it.arguments?.getString("classCode").toString()
                             val lec_DeviceID = it.arguments?.getString("lec_DeviceID").toString()
-                            signAttendanceScreen(
-                                navController = navController, stu_DeviceID = stu_DeviceID, lec_DeviceID = lec_DeviceID
+                            val stu_DeviceID = it.arguments?.getString("stu_DeviceID").toString()
+                            signAttendance_Screen(
+                                navController = navController, classCode = classCode, lec_DeviceID = lec_DeviceID,
+                                stu_DeviceID = stu_DeviceID
                             )
+                        }
+                        composable("selectClass_Screen"){
+                            SeclectClassScreen(navController)
                         }
                     }
                 }

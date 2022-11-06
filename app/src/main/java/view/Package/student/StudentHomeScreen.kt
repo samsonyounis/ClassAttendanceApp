@@ -28,8 +28,6 @@ import view.Package.ReusableFunctions.topRow
 @Composable
 fun studentHomeScreen(navController: NavController){
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var stu_DeviceID by rememberSaveable { mutableStateOf("123") }
-    var lec_DeviceID by rememberSaveable { mutableStateOf("AB:30:43:FF:H2") }
     val context = LocalContext.current
     val  sessionManager = SessionManager(context) // instance of session Manager
     val bluetoothManager: BluetoothManager? =
@@ -82,23 +80,14 @@ fun studentHomeScreen(navController: NavController){
                             Toast.makeText(context,"Device supports bluetooth", Toast.LENGTH_LONG).show()
                             //turning on the bluetooth
                             if (bluetoothAdapter?.isEnabled == false) {
-                                //getting the bluetooth hardware address of the student device.
-                                if (ActivityCompat.checkSelfPermission(
-                                        context,
-                                        Manifest.permission.BLUETOOTH_CONNECT
-                                    ) != PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    stu_DeviceID = bluetoothAdapter.address
-                                }
                                 val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                                val intent = Intent(ACTION_BLUETOOTH_SETTINGS)
-                                laucher.launch(discoverableIntent)
+                                laucher.launch(discoverableIntent) // launching the intent
                             }
                             else{
-                                stu_DeviceID = bluetoothAdapter.address
                             }
+                            navController.navigate("selectClass_Screen")
                             //navController.navigate("avialableClasses_Screen")
-                            navController.navigate("signAttendance_Screen/$stu_DeviceID/$lec_DeviceID")
+                            //navController.navigate("signAttendance_Screen/$stu_DeviceID/$lec_DeviceID")
                         }
 
                     }) {

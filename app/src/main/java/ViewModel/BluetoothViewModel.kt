@@ -20,9 +20,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 class BluetoothViewModel():ViewModel() {
     var devices: MutableLiveData<Set<BluetoothDevice?>> = MutableLiveData() //list of discovered devices
+    var a:List<BluetoothDevice> = listOf()
+    var d:MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(a)
 
     @Composable
     fun bluetooth() {
