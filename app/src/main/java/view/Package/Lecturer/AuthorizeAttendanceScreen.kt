@@ -37,8 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun authorizeAttendanceScreen(navController: NavController, classCode:String,
-                              classDuration:String,deviceID:String){
+fun authorizeAttendanceScreen(navController: NavController, classCode:String, classDuration:String){
     var classCode by rememberSaveable { mutableStateOf(classCode) }
     var classVenue by rememberSaveable { mutableStateOf("") }
     val dateFormatter = SimpleDateFormat("dd-MM-yyyy")
@@ -47,7 +46,6 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
     var week by rememberSaveable { mutableStateOf("") }
     var classDuration by rememberSaveable { mutableStateOf(classDuration) }
     var instructorID by rememberSaveable { mutableStateOf("") }
-    var instructorDeviceID by rememberSaveable { mutableStateOf(deviceID) }
 
     var classVenueError by rememberSaveable { mutableStateOf("") }
     var weekError by rememberSaveable { mutableStateOf("") }
@@ -158,19 +156,7 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
                     keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
                 )
                 Text(text = instructorIDError, color = Color.Red)
-                Column() {
-                    Text(text = "Device ID")
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(value = instructorDeviceID, onValueChange = {instructorDeviceID = it},
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Done
-                        ),
-                        isError = false,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(10.dp), enabled = false, readOnly = true
-                    )
-                }
+
                 Spacer(modifier = Modifier.height(10.dp))
                 commonButton(onClick = {
                     //validating inputs here
@@ -199,7 +185,7 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String,
                         showProgress = true
                         val authorization = AttendanceAuthorization(
                             classCode.uppercase(),classVenue.uppercase(),classDuration.toInt(),
-                            classDate,week,instructorID,instructorDeviceID)
+                            classDate,week,instructorID)
                         viewmodel.addAuthorization(authorization)
                         viewmodel.feedback.observe(lifeCycleOwner){response->
                             if (response == "success"){

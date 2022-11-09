@@ -3,6 +3,7 @@ package view.Package.Lecturer
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
+import android.companion.CompanionDeviceManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
@@ -31,18 +32,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.navigation.NavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import view.Package.ReusableFunctions.commonButton
 import view.Package.ReusableFunctions.outlinedTextField
 import view.Package.ReusableFunctions.topRow
+import java.net.NetworkInterface
 
 @Composable
 fun input(navController: NavController){
     var classCode by rememberSaveable { mutableStateOf("") }
     var classDuration by rememberSaveable { mutableStateOf("") }
-    var instructorDeviceID by rememberSaveable { mutableStateOf("123") }
 
     var classCodeError by rememberSaveable { mutableStateOf("") }
     var classDurationError by rememberSaveable { mutableStateOf("") }
@@ -132,9 +134,7 @@ fun input(navController: NavController){
                                     ) != PackageManager.PERMISSION_GRANTED
                                 ) {
                                     //rename the device
-                                    bluetoothAdapter?.setName(classCode)
-                                    // get the device ID
-                                    instructorDeviceID = bluetoothAdapter.address.toString()
+                                    bluetoothAdapter?.setName(classCode.uppercase())
                                 }
                                 //enabling the bluetooth
                                 val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
@@ -151,14 +151,12 @@ fun input(navController: NavController){
                                 ) {
                                     //rename the device
                                     bluetoothAdapter?.setName(classCode.uppercase())
-                                    // get the device ID
-                                    instructorDeviceID = bluetoothAdapter.address.toString()
+
                                 }
                             }
-                            Log.d("address", instructorDeviceID)
                             Log.d("name", bluetoothAdapter.name)
                             navController.navigate(
-                                "authorizeAttendance_Screen/${classCode.uppercase()}/$classDuration/$instructorDeviceID")
+                                "authorizeAttendance_Screen/${classCode.uppercase()}/$classDuration")
 
                         }
                     }

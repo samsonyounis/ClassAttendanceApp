@@ -1,4 +1,4 @@
-package view.Package.student
+package view.Package.Student
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -7,10 +7,15 @@ import android.bluetooth.BluetoothManager
 import android.companion.AssociationRequest
 import android.companion.BluetoothDeviceFilter
 import android.companion.CompanionDeviceManager
+import android.content.ContentResolver
+import android.content.Context
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.media.audiofx.BassBoost
 import android.os.Build
 import android.os.Handler
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -40,12 +45,15 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import view.Package.ReusableFunctions.commonButton
 import view.Package.ReusableFunctions.topRow
+import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SeclectClassScreen(navController: NavController) {
     val context = LocalContext.current
     val companionDeviceManager = context.getSystemService<CompanionDeviceManager>()
+    //getting the unique android device ID here
+    val secureId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID)
 
     var classCode by rememberSaveable { mutableStateOf("unknown") } // this is the lec device name
     var lec_DeviceID by rememberSaveable { mutableStateOf("unknown") }
@@ -78,9 +86,7 @@ fun SeclectClassScreen(navController: NavController) {
                         lec_DeviceID = device.address
                     }
                 }
-            if (bluetoothAdapter != null) {
-                stu_DeviceID = bluetoothAdapter.address
-            }
+            stu_DeviceID = secureId
         }
     Scaffold( modifier = Modifier.padding(16.dp),
         topBar = {

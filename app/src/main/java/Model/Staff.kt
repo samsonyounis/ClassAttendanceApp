@@ -6,5 +6,6 @@ data class Staff(
     val staff_Middlename:String,
     val staff_Lastname:String,
     val email:String,
-    val phone:String
+    val phone:String,
+    val staff_DeviceID:String
 )

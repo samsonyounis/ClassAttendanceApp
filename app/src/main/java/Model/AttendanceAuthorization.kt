@@ -6,6 +6,5 @@ data class AttendanceAuthorization(
     val class_Duration:Int,
     val class_Date:String,
     val week:String,
-    val lecture_ID:String,
-    val lectureDeviceID:String,
+    val lecture_ID:String
 )

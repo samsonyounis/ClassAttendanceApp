@@ -1,6 +1,6 @@
 package ViewModel
 
-import Model.ServerRes
+import Model.GenericResponse
 import Model.Staff
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
@@ -14,17 +14,26 @@ class AddStaffViewModel(private val repository: Repository):ViewModel() {
     var feedback:MutableLiveData<String> = MutableLiveData()
 
     fun AddStaff(staff: Staff){
-        repository.AddStaff(staff).enqueue(object : Callback<ServerRes>{
-            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
+        repository.AddStaff(staff).enqueue(object : Callback<GenericResponse>{
+            override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
                 if (response.isSuccessful){
                     feedback.value = "success"
                 }
                 else{
-                    feedback.value = "failed to add staff\n${response.body()?.message}\n${response.code()}"
+                    if (response.code() == 409){
+                        feedback.value = "failed to add staff\n" +
+                                "Staff with ID ${staff.staffID} already exists\n" +
+                                "${response.code()}"
+                    }
+                    else{
+                        feedback.value = "failed to add staff\n" +
+                                "Some error occured on the server\n" +
+                                "${response.code()}"
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
+            override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
                 feedback.value = "Somthing went wrong with your connection\n\n${t.message}"
             }
 

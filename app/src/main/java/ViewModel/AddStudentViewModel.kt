@@ -1,6 +1,6 @@
 package ViewModel
 
-import Model.ServerRes
+import Model.GenericResponse
 import Model.Student
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
@@ -14,17 +14,26 @@ class AddStudentViewModel(private val repository: Repository):ViewModel() {
     var feeddback:MutableLiveData<String> = MutableLiveData()
 
     fun AddStudent(student: Student){
-        repository.AddStudent(student).enqueue(object :Callback<ServerRes>{
-            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
+        repository.AddStudent(student).enqueue(object :Callback<GenericResponse>{
+            override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
                 if (response.isSuccessful){
                     feeddback.value = "success"
                 }
                 else{
-                    feeddback.value = "failed to add student\n${response.body()?.message}\n${response.code()}"
+                    if (response.code() == 409){
+                        feeddback.value = "failed to add student\n" +
+                                "Student with ID ${student.studentID} already exists\n" +
+                                "${response.code()}"
+                    }
+                    else{
+                        feeddback.value = "failed to add student\n" +
+                                "Some error occurred on the server\n" +
+                                "${response.code()}"
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
+            override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
                 feeddback.value = "Something went wrong with your connection\n\n${t.message}"
             }
         })

@@ -1,4 +1,4 @@
-package view.Package.student
+package view.Package.Student
 
 import Model.SignAttendanceRequest
 import Repository.Repository
@@ -47,9 +47,8 @@ fun signAttendance_Screen(navController: NavController,classCode:String,lec_Devi
     var studentIdError by rememberSaveable { mutableStateOf("") }
     var firstnameError by rememberSaveable { mutableStateOf("") }
     var lastnameError by rememberSaveable { mutableStateOf("") }
-    var classCodeError by rememberSaveable { mutableStateOf("") }
 
-    var toplabel by rememberSaveable { mutableStateOf("Enrollment") }
+    var toplabel by rememberSaveable { mutableStateOf("Sign attendance") }
     var feedback by rememberSaveable { mutableStateOf("Successfully enrolled") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
 
@@ -145,31 +144,31 @@ fun signAttendance_Screen(navController: NavController,classCode:String,lec_Devi
                         //validating the user inputs here
                         if (studentID.isBlank()){
                             studentIdError ="* student ID is required"
-                            firstnameError = ""; lastnameError = ""; classCodeError = ""
+                            firstnameError = ""; lastnameError = ""
                         }
                         else if (studentID.length<3 || studentID.length>3){
                             studentIdError = "* student ID must be 3 digits long"
-                            firstnameError = ""; lastnameError = ""; classCodeError = ""
+                            firstnameError = ""; lastnameError = ""
                         }
                         else if(stu_FirstName.isBlank()){
                             firstnameError = "* first name required"
-                            studentIdError = ""; lastnameError = ""; classCodeError = ""
+                            studentIdError = ""; lastnameError = ""
                         }
                         else if (!stu_FirstName.substring(0,1).matches("[a-zA-Z]".toRegex())){
                             firstnameError = "* name can not start with numbers, symbols or white spaces"
-                            studentIdError = ""; lastnameError = ""; classCodeError = ""
+                            studentIdError = ""; lastnameError = ""
                         }
                         else if(stu_LastName.isBlank()){
                             lastnameError = "* last name is required"
-                            studentIdError = ""; firstnameError = ""; classCodeError = ""
+                            studentIdError = ""; firstnameError = ""
                         }
                         else if (!stu_LastName.substring(0,1).matches("[a-zA-Z]".toRegex())){
                             lastnameError = "* name can not start with numbers, symbols or white spaces"
-                            studentIdError = ""; firstnameError = ""; classCodeError = ""
+                            studentIdError = ""; firstnameError = ""
                         }
                         else
                         {
-                            studentIdError = ""; firstnameError = ""; lastnameError = ""; classCodeError = ""
+                            studentIdError = ""; firstnameError = ""; lastnameError = ""
                             showProgress = true
                             // creating the sign atendance request object
                             val request = SignAttendanceRequest(studentID,classCode.uppercase(),stu_FirstName,

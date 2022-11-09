@@ -40,6 +40,7 @@ fun addLecturerScreen(navController: NavController){
     var staffLastname by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var phone by rememberSaveable { mutableStateOf("") }
+    var staff_DeviceID by rememberSaveable { mutableStateOf("") }
 
     var staffIdError by rememberSaveable { mutableStateOf("") }
     var firstnameError by rememberSaveable { mutableStateOf("") }
@@ -47,6 +48,7 @@ fun addLecturerScreen(navController: NavController){
     var lastnameError by rememberSaveable { mutableStateOf("") }
     var emailError by rememberSaveable { mutableStateOf("") }
     var phoneError by rememberSaveable { mutableStateOf("") }
+    var staff_DeviceIdError by rememberSaveable { mutableStateOf("") }
 
     val toplabel by rememberSaveable { mutableStateOf("Add Staff") }
     val feedback by rememberSaveable { mutableStateOf(" Lecturer added successfully") }
@@ -116,84 +118,112 @@ fun addLecturerScreen(navController: NavController){
                     keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
                 )
                 Text(text = phoneError, color = Color.Red)
+                outlinedTextField(
+                    valueText = staff_DeviceID, onValueChange = {staff_DeviceID = it}, isError = false,
+                    labelText = "Lecturer's Device ID", placeholderText = "",
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                )
+                Text(text = staff_DeviceIdError, color = Color.Red)
                 Spacer(modifier = Modifier.height(10.dp))
                 // onclick listener buuton
                 commonButton(onClick = {
                     //validating the inputs here
                     if (staffID.isBlank()){
                         staffIdError = "* staff ID field is blank"
-                        firstnameError = ""; middlenameError = ""; lastnameError = ""; emailError = ""; phoneError = ""
+                        firstnameError = ""; middlenameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (staffID.length<3 ||staffID.length>3){
                         staffIdError = "* staff ID must be 3 digits long"
-                        firstnameError = ""; middlenameError = ""; lastnameError = ""; emailError = ""; phoneError = ""
+                        firstnameError = ""; middlenameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (staffFirstname.isBlank()){
                         firstnameError = "* first name field is blank"
-                        staffIdError = "";  middlenameError = ""; lastnameError = ""; emailError = ""; phoneError = ""
+                        staffIdError = "";  middlenameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (staffFirstname.length<3 || staffFirstname.length>25){
                         firstnameError = "* name must be atleast 3 characters and atmost 25 characters long"
-                        staffIdError = ""; middlenameError = ""; lastnameError = "" ; emailError = ""; phoneError = ""
+                        staffIdError = ""; middlenameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if(!staffFirstname.substring(0,1).matches("[a-zA-Z]".toRegex())){
                         firstnameError = "* name can not start with symbols, numbers or white space characters"
-                        staffIdError = ""; middlenameError = ""; lastnameError = ""; emailError = ""; phoneError = ""
+                        staffIdError = ""; middlenameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (staffMiddlename.isBlank()){
                         middlenameError = "* middle name field is blank"
-                        staffIdError = ""; firstnameError = ""; lastnameError = "" ; emailError = ""; phoneError = ""
+                        staffIdError = ""; firstnameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (staffMiddlename.length<3 || staffMiddlename.length>25){
                         middlenameError = "* name must be atleast 3 characters and atmost 25 characters long"
-                        staffIdError = ""; firstnameError = ""; lastnameError = "" ; emailError = ""; phoneError = ""
+                        staffIdError = ""; firstnameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if(!staffMiddlename.substring(0,1).matches("[a-zA-Z]".toRegex())){
                         middlenameError = "* name can not start with symbols, numbers or white space characters"
-                        staffIdError = ""; firstnameError = ""; lastnameError = "" ; emailError = ""; phoneError = ""
+                        staffIdError = ""; firstnameError = ""; lastnameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (staffLastname.isBlank()){
                         lastnameError = "* last name field is blank"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; emailError = ""; phoneError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (staffLastname.length<3 || staffLastname.length>25){
                         lastnameError = "* name must be atleast 3 characters and atmost 25 characters long"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; emailError = ""; phoneError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if(!staffLastname.substring(0,1).matches("[a-zA-Z]".toRegex())){
                         lastnameError = "* name can not start with symbols, numbers or white space characters"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; emailError = ""; phoneError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        emailError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (email.isBlank()){
                         emailError = " email field is blank"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = ""; phoneError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = "";
+                        lastnameError = ""; phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if(!email.contains("@")){
                         emailError = "* invalid email format"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = "";phoneError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        lastnameError = "";phoneError = ""; staff_DeviceIdError = ""
                     }
                     else if (!email.substring(0,1).matches("[a-zA-Z]".toRegex())){
                         emailError = "* email can not start with numbers, symbols or white spaces"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = "" ;phoneError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        lastnameError = "" ;phoneError = "";staff_DeviceIdError = ""
                     }
                     else if (phone.isBlank()){
                         phoneError = "* phone number field is blank"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = "" ;emailError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        lastnameError = "" ;emailError = ""; staff_DeviceIdError = ""
                     }
                     else if (phone.length<10 || phone.length>10){
                         phoneError = "* phone number must be 10 digits long"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = "";emailError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        lastnameError = "";emailError = ""; staff_DeviceIdError = ""
                     }
                     else if (phone.substring(0,1).toInt() != 0){
                         phoneError = "* phone number must start with 0"
-                        staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = "" ;emailError = ""
+                        staffIdError = ""; firstnameError = ""; middlenameError = ""
+                        lastnameError = "" ;emailError = ""; staff_DeviceIdError = ""
+                    }
+                    else if (staff_DeviceID.isBlank()){
+                        staff_DeviceIdError ="* Lecturer device ID is required"
+                        phoneError = ""; staffIdError = ""; firstnameError = ""; middlenameError = "";lastnameError = "" ;emailError = ""
                     }
                     else{
                         staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = ""
                         emailError = ""; phoneError = ""
                         showProgress = true
                         // creating staff object
-                        val staff = Staff(staffID, staffFirstname, staffMiddlename, staffLastname, email, phone)
+                        val staff = Staff(staffID, staffFirstname, staffMiddlename, staffLastname,
+                            email, phone,staff_DeviceID.uppercase())
                         //calling the function in view model and observing the value
                         viewmodel.AddStaff(staff)
                         viewmodel.feedback.observe(lifeCycleOwner) { response ->

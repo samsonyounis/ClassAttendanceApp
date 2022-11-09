@@ -4,7 +4,6 @@ import Repository.Repository
 import ViewModel.AdminAttendanceReportViewModel
 import ViewModel.StudentAttendanceReportViewModel
 import ViewModel.ViewAccountRequestViewModel
-import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,7 +23,7 @@ import view.Package.Admin.*
 import view.Package.Lecturer.*
 import view.Package.ReusableFunctions.changeSystemBarColors
 import view.Package.ReusableFunctions.loginScreen
-import view.Package.student.*
+import view.Package.Student.*
 import view.Package.ui.theme.Class_Attendance_AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -148,17 +147,15 @@ class MainActivity : ComponentActivity() {
                         ) {
                             viewAccountRequestScreen(navController = navController,viewmodel)
                         }
-                        composable("authorizeAttendance_Screen/{classCode}/{classDuration}/{deviceID}",
+                        composable("authorizeAttendance_Screen/{classCode}/{classDuration}",
                             arguments = listOf(
                                 navArgument("classCode"){type = NavType.StringType},
-                                navArgument("classDuration"){type = NavType.StringType},
-                                navArgument("deviceID"){type = NavType.StringType}
+                                navArgument("classDuration"){type = NavType.StringType}
                             )
                         ) {
                             val classCode = it.arguments?.getString("classCode").toString()
                             val classDuration = it.arguments?.getString("classDuration").toString()
-                            val deviceID = it.arguments?.getString("deviceID").toString()
-                            authorizeAttendanceScreen(navController = navController,classCode,classDuration,deviceID)
+                            authorizeAttendanceScreen(navController = navController,classCode,classDuration)
                         }
                         composable("stopAttendance_Screen"
                         ) {

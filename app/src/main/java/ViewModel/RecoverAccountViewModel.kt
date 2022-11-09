@@ -1,8 +1,7 @@
 package ViewModel
 
-import Model.AccountRequest
+import Model.GenericResponse
 import Model.RecoverAccount
-import Model.ServerRes
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,19 +14,26 @@ class RecoverAccountViewModel(private val repository: Repository):ViewModel() {
     var feedback: MutableLiveData<String> = MutableLiveData()
 
     fun recoverAccount(request: RecoverAccount){
-        repository.recoverAccount(request).enqueue(object: Callback<ServerRes> {
+        repository.recoverAccount(request).enqueue(object: Callback<GenericResponse> {
 
-            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
+            override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
                 if (response.isSuccessful){
                     feedback.value = "success"
                 }
                 else{
-                    feedback.value = "failed to send request\n${response.body()?.message}\n${response.code()}"
-
+                    if (response.code() == 400){
+                        feedback.value = "No account found\n" +
+                                "${response.code()}"
+                    }
+                    else{
+                        feedback.value = "failed to send request\n" +
+                                "some error occurred on the server\n" +
+                                "${response.code()}"
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
+            override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
                 feedback.value = "something went wrong\n ${t.message}"
             }
 

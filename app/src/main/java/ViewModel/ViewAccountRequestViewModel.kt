@@ -22,8 +22,11 @@ class ViewAccountRequestViewModel(private val repository: Repository):ViewModel(
                 if (response.isSuccessful) {
                     feedback.value = "success"
                     requestList = response.body()!!
-                } else {
-                    feedback.value = "failure to get requests\n${response.code()}"
+                }
+                else {
+                    feedback.value = "could not get requests\n" +
+                            "some error on the server\n" +
+                            "${response.code()}"
                 }
             }
 

@@ -1,5 +1,5 @@
 package Model
 
-data class ServerRes(
-    val message:String
+class GenericResponse(
+    val response:String
 )

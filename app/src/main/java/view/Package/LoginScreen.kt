@@ -124,20 +124,15 @@ fun loginScreen(navController: NavController) {
                 Column(modifier = Modifier.padding(top = 70.dp)) {
                     //Spacer(modifier = Modifier.height(16.dp))
                     commonButton(onClick = {
-                        validationError = loginValidation(username,password)
-                        if(validationError.startsWith('u')){
-                            usernameErrorMsg = validationError
-                            passwordErrorMsg = ""
-                            usernameIsError = true
-                            passwordIsError = false
+                        //validating the inputs here
+                        if (username.isBlank()){
+                            usernameErrorMsg = "* username field is blank"; passwordErrorMsg = ""
                         }
-                        else if (validationError.startsWith('p')){
-                            passwordErrorMsg = validationError
-                            usernameErrorMsg = ""
-                            passwordIsError = true
-                            usernameIsError = false
+                        else if (password.isBlank()){
+                            passwordErrorMsg = "* password is blank"; usernameErrorMsg = ""
                         }
                         else{
+                            passwordErrorMsg = ""; usernameErrorMsg = ""
                             showProgress = true
                             val loginRequest = LoginRequest(username,password,user_type)
                             viewmodel.LoginUser(loginRequest)

@@ -64,14 +64,14 @@ fun welcomeScreen(navController: NavController){
                         navController.navigate("login_Screen")
                         sessionManager.saveUserType("STAFF")
                     }) {
-                        Text("Faculty staff")
+                        Text("Faculty lecturer")
                     }
                     Divider()
                     DropdownMenuItem(onClick = {
                         navController.navigate("login_Screen")
                         sessionManager.saveUserType("ADMIN")
                     }) {
-                        Text("Admin/Faculty")
+                        Text("Faculty Admin")
                     }
                 }
 

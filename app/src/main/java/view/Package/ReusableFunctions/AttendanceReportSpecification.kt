@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets
 fun getAttendanceSpecification(navController: NavController, topLabel:String){
     var regNo by rememberSaveable { mutableStateOf("") }
     var regNoError by rememberSaveable { mutableStateOf("") }
-    var label by rememberSaveable { mutableStateOf("Registration number") }
+    var label by rememberSaveable { mutableStateOf("Enter your registration number") }
     Scaffold(modifier = Modifier.padding(16.dp),
         topBar = {
             topRow(text =topLabel , navController = navController)

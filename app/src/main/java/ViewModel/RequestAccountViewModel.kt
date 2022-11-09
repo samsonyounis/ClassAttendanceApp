@@ -1,7 +1,7 @@
 package ViewModel
 
 import Model.AccountRequest
-import Model.ServerRes
+import Model.GenericResponse
 import Repository.Repository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,20 +14,32 @@ class RequestAccountViewModel(private val repository: Repository):ViewModel() {
     var response1:MutableLiveData<String> = MutableLiveData()
 
     fun AddAccountRequest(request: AccountRequest){
-        repository.AddAccountRequest(request).enqueue(object: Callback<ServerRes>{
+        repository.AddAccountRequest(request).enqueue(object: Callback<GenericResponse>{
 
-            override fun onResponse(call: Call<ServerRes>, response: Response<ServerRes>) {
+            override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
                 if (response.isSuccessful){
                     response1.value = "success"
                 }
                 else{
-                    response1.value = " failed to send request\n\n${response.body()?.message}\n${response.code()}"
-                    //failed to send request
-                    //${response.code()}
+                    if (response.code() == 400){
+                        response1.value = "failed to send rquest\n" +
+                                "No student associated with this ID ${request.student_ID}\n" +
+                                "${response.code()}"
+                    }
+                    else if (response.code() == 409){
+                        response1.value = "failed to send request\n" +
+                                "Request already exists\n" +
+                                "${response.code()}"
+                    }
+                    else{
+                        response1.value = "failed to send request\n" +
+                                "some error occurred on the server\n" +
+                                "${response.code()}"
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ServerRes>, t: Throwable) {
+            override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
                 response1.value = "something went wrong with your connection ${t.message}"
             }
 

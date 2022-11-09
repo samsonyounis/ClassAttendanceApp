@@ -25,7 +25,9 @@ class AdminAttendanceReportViewModel(private  val repository: Repository):ViewMo
                     attendanceRecords = response.body()!!
                 }
                 else{
-                    feedback.value = "failed to load attendance report\n\n${response.code()}"
+                    feedback.value = "failed to load attendance report\n" +
+                            "some error occurred on server\n" +
+                            "${response.code()}"
                 }
             }
 
