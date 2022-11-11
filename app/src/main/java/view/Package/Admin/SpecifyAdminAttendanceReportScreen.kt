@@ -51,6 +51,7 @@ fun SpecifyAdminAttendanceReportScreen(navController: NavController){
                 }
                 else
                 {
+                    classCodeError = ""
                     navController.navigate("adminAttendanceReport_Screen/${classCode.uppercase()}")}
                 },
                 label = "View")

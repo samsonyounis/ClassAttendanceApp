@@ -48,12 +48,17 @@ fun viewAccountRequestScreen(navController: NavController,viewmodel: ViewAccount
     viewmodel.Get_AccountRequests()
     viewmodel.feedback.observe(lifeCycleOwner) { feedback ->
         if (feedback.toString() == "success") {
-            serverRes = feedback
             requestList = viewmodel.requestList
-            showProgress = true
+            if (requestList.isEmpty() == true) {
+                serverRes = "No account requests found"
+                showProgress = true
+            }
+            else{
+                showProgress = true
+            }
+
         } else {
-            serverRes = feedback
-            requestList = listOf()
+            serverRes = feedback.toString()
             showProgress = true
         }
 
@@ -74,57 +79,58 @@ fun viewAccountRequestScreen(navController: NavController,viewmodel: ViewAccount
                 }
             }
         }
+        else{
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 20.dp)
+                .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                if(requestList.isEmpty() == false){
+                    for (i in requestList){
+                        Column(modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 20.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            if(!requestList.isEmpty()){
-                for (i in requestList){
-                    Column(modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)) {
-
-                        Row(modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Image(imageVector = Icons.Filled.Person, contentDescription = "User",
-                                modifier = Modifier
-                                    .align(Alignment.CenterVertically)
-                                    .size(100.dp)
-                                    .clip(
-                                        CircleShape
-                                    ))
-                            Column {
-                                Text(text = "student ID: ${i.student_ID}")
-                                Text(text = "student Firstname: ${i.student_Firstname}")
-                                Text(text = "student Lastname: ${i.student_lastname}")
-                                Text(text = "Email: ${i.email}")
-                                Text(text = "Phone: ${i.phone}")
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Image(imageVector = Icons.Filled.Person, contentDescription = "User",
+                                    modifier = Modifier
+                                        .align(Alignment.CenterVertically)
+                                        .size(100.dp)
+                                        .clip(
+                                            CircleShape
+                                        ))
+                                Column {
+                                    Text(text = "student ID: ${i.student_ID}")
+                                    Text(text = "student Firstname: ${i.student_Firstname}")
+                                    Text(text = "student Lastname: ${i.student_lastname}")
+                                    Text(text = "Email: ${i.email}")
+                                    Text(text = "Phone: ${i.phone}")
+                                }
                             }
+                            commonButton(onClick = {
+                                val userId = URLEncoder.encode(i.student_ID, StandardCharsets.UTF_8.toString())
+                                navController.navigate(
+                                    "createAccount_Screen/${i.email}/$userId/${i.email}/$userId")
+                            }, label = "Create Account")
                         }
-                        commonButton(onClick = {
-                            val userId = URLEncoder.encode(i.student_ID, StandardCharsets.UTF_8.toString())
-                            navController.navigate(
-                                "createAccount_Screen/${i.email}/$userId/${i.email}/$userId")
-                        }, label = "Create Account")
                     }
                 }
-            }
 
-            else{
-                Column(modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = serverRes)
-                    commonButton(onClick = {
-                        val userId = URLEncoder.encode(userID, StandardCharsets.UTF_8.toString())
-                        navController.navigate(
-                            "createAccount_Screen/$username/$password/$accountType/$userId")
-                    }, label = "Create Account")
+                else{
+                    Column(modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = serverRes)
+                        commonButton(onClick = {
+                           // val userId = URLEncoder.encode(userID, StandardCharsets.UTF_8.toString())
+                            navController.navigateUp()
+                                //"createAccount_Screen/$username/$password/$accountType/$userId")
+                        }, label = "Ok")
+                    }
                 }
-            }
 
+            }
         }
     }
 }

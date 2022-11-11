@@ -33,10 +33,10 @@ fun AddStudent(@Body student:Student):Call<GenericResponse>
 @POST("staff")
  fun AddStaff(@Body staff: Staff):Call<GenericResponse>
 
- @GET("/api/{regNo}")
- fun Get_StudentAttendanceReport(@Path("regNo") regNo:String):Call<List<Student_attendanceReport>>
+ @GET("attendance/studentReport/{studentID}")
+ fun Get_StudentAttendanceReport(@Path("studentID") studentID:String):Call<List<Student_attendanceReport>>
 
- @GET("/api/{classCode}")
+ @GET("attendance/facultyReport/{classCode}")
  fun Get_FacultyAttendanceReport(@Path("classCode") classCode:String):Call<List<Faculty_AttendanceReport>>
 
  @GET("requestAccount")

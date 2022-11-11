@@ -20,18 +20,18 @@ class CreateAccountViewModel(private val repository: Repository):ViewModel() {
                 else{
                     if (response.code() == 400){
                         feedback.value = "failed to create account\n" +
-                                "Username ${account.username} already taken try another username\n" +
-                                "${response.code()}"
+                                "Username ${account.username} already taken try another username\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else if (response.code() == 409){
                         feedback.value = "failed to create account\n" +
-                                "User with ID ${account.user_ID} already has an account\n" +
-                                "${response.code()}"
+                                "User with ID ${account.user_ID} already has an account\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else{
                         feedback.value = "failed to create account\n" +
-                                "Some error occurred on the server\n" +
-                                "${response.code()}"
+                                "Some error occurred on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }

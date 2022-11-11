@@ -148,14 +148,14 @@ fun addClassScreen(navController: NavController){
                         // calling the function in the view model and observing the value
                         viewmodel.AddClass(singleClass)
                         viewmodel.feedback.observe(lifeCycleOwner) { response ->
-                            if (response == "success") {
+                            if (response.toString() == "success") {
                                 showProgress = false
                                 navController.navigate("feedback_Screen/$toplabel/$feedback")
                             } else {
                                 val encodedResponse =
                                     URLEncoder.encode(response, StandardCharsets.UTF_8.toString())
                                 showProgress = false
-                                navController.navigate("feedback_Screen/$toplabel/$encodedResponse")
+                                navController.navigate("feedback_Screen/$toplabel/${encodedResponse}")
                             }
                         }
                     }

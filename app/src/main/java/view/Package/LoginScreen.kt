@@ -137,7 +137,7 @@ fun loginScreen(navController: NavController) {
                             val loginRequest = LoginRequest(username,password,user_type)
                             viewmodel.LoginUser(loginRequest)
                             viewmodel.feedback.observe(lifeCycleOwner){response->
-                                if (response != "success"){
+                                if (response == "success"){
                                     if (userType == "STUDENT"){
                                         showProgress = false
                                         navController.navigate("studentHome_Screen")

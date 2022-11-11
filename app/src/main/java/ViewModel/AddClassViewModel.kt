@@ -20,13 +20,13 @@ class AddClassViewModel(private val repository: Repository):ViewModel() {
                     } else {
                         if (response.code() == 409){
                             feedback.value = "failed to add class\n" +
-                                    "Class with the code ${singleClass.classCode} already exists\n" +
-                                    "${response.code()}"
+                                    "Class with the code ${singleClass.classCode} already exists\n\n" +
+                                    "HTTP Error code: ${response.code()}"
                         }
                         else if (response.code() == 400){
                             feedback.value = "failed to add class\n" +
-                                    "Bad request, instructor's ID ${singleClass.classInstructorID} does not exist" +
-                                    "\n\n${response.code()}"
+                                    "Bad request, instructor's ID ${singleClass.classInstructorID} does not exist\n\n" +
+                                    "HTTP Error code: ${response.code()}"
                         }
                         else{
                             feedback.value = "failed to add class\n${response.body()?.response}\n${response.code()}"

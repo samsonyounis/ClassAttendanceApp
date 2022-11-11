@@ -20,13 +20,13 @@ class StopClassAttendanceViewModel(private val repository: Repository):ViewModel
                 }
                 else{
                     if (response.code() == 400){
-                        feedback.value = "authorization not found\n you have not authorized this class before\n" +
-                                "${response.code()}"
+                        feedback.value = "authorization not found\n you have not authorized this class before\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else{
                         feedback.value = "failed to stop class attendance\n" +
-                                "some error occurred on the server\n" +
-                                "${response.code()}"
+                                "some error occurred on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }

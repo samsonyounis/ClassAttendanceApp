@@ -47,6 +47,7 @@ fun getAttendanceSpecification(navController: NavController, topLabel:String){
                }
                else
                {
+                   regNoError = ""
                    val regNo = URLEncoder.encode(regNo, StandardCharsets.UTF_8.toString())
                    navController.navigate("studentAttendanceReport_Screen/$regNo")
                }

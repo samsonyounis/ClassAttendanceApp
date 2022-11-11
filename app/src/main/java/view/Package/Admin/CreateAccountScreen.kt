@@ -50,7 +50,7 @@ fun createAccountScreen(navController: NavController,username:String,password:St
 
 
     var toplabel by rememberSaveable { mutableStateOf("Create account") }
-    var feedback by rememberSaveable { mutableStateOf(" Accout created successfully") }
+    var feedback by rememberSaveable { mutableStateOf(" Account created successfully") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
     var expanded by rememberSaveable { mutableStateOf(false) }
     // creating arrow icon

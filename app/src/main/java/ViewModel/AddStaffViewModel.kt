@@ -22,13 +22,13 @@ class AddStaffViewModel(private val repository: Repository):ViewModel() {
                 else{
                     if (response.code() == 409){
                         feedback.value = "failed to add staff\n" +
-                                "Staff with ID ${staff.staffID} already exists\n" +
-                                "${response.code()}"
+                                "Staff with ID ${staff.staffID} already exists\n\n" +
+                                "HTTP Erro code: ${response.code()}"
                     }
                     else{
                         feedback.value = "failed to add staff\n" +
-                                "Some error occured on the server\n" +
-                                "${response.code()}"
+                                "Some error occured on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }

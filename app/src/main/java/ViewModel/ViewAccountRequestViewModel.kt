@@ -25,13 +25,13 @@ class ViewAccountRequestViewModel(private val repository: Repository):ViewModel(
                 }
                 else {
                     feedback.value = "could not get requests\n" +
-                            "some error on the server\n" +
-                            "${response.code()}"
+                            "some error on the server\n\n" +
+                            "HTTP Error code: ${response.code()}"
                 }
             }
 
             override fun onFailure(call: Call<List<AccountRequest>>, t: Throwable) {
-                feedback.value = "Something went wrong with connection ${t.message}"
+                feedback.value = "Something went wrong with connection\n\n ${t.message}"
             }
         })
     }

@@ -22,13 +22,13 @@ class AddStudentViewModel(private val repository: Repository):ViewModel() {
                 else{
                     if (response.code() == 409){
                         feeddback.value = "failed to add student\n" +
-                                "Student with ID ${student.studentID} already exists\n" +
-                                "${response.code()}"
+                                "Student with ID ${student.studentID} already exists\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else{
                         feeddback.value = "failed to add student\n" +
-                                "Some error occurred on the server\n" +
-                                "${response.code()}"
+                                "Some error occurred on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }

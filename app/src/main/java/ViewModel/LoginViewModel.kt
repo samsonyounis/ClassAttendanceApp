@@ -21,17 +21,18 @@ class LoginViewModel(private val repository: Repository):ViewModel() {
                 else{
                     if (response.code() == 400){
                         feedback.value = "login failed\n" +
-                                "Username ${loginRequest.username} does not exist\n" +
-                                "${response.code()}"
+                                "Username ${loginRequest.username} does not exist\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else if (response.code() == 409){
                         feedback.value  = "login failed\n" +
-                                "Invalid password or user type not matching the credentials"
+                                "Invalid password or user type not matching the credentials\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else{
                         feedback.value = "Login failed\n" +
-                                "some error occurred on the server\n" +
-                                "${response.code()}"
+                                "some error occurred on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }

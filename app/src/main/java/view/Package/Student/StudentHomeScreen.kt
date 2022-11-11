@@ -63,11 +63,12 @@ fun studentHomeScreen(navController: NavController){
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
-                ) {
+                ) {/*
                     Divider()
                     DropdownMenuItem(onClick = {navController.navigate("enrollment_Screen") }) {
                         Text("Enroll into class")
                     }
+                    */
                     Divider()
                     DropdownMenuItem(onClick = {
                         if (bluetoothAdapter == null) {

@@ -20,17 +20,18 @@ class AttendanceAuthorizationViewModel(private val repository: Repository):ViewM
                 else{
                     if (response.code() == 400){
                         feedback.value = "failed ro authorize attendance\n" +
-                                "Class with code ${authorization.class_Code} does not exist\n" +
-                                "${response.code()}"
+                                "Class with code ${authorization.class_Code} does not exist\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else if (response.code() == 409){
                         feedback.value = "failed to authorize attendance\n" +
-                                "${response.code()}"
+                                "you are not assigned to this class ${authorization.class_Code}\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else{
                         feedback.value = "failed to authorize class attendance\n" +
-                                "some error occurred on the server\n" +
-                                "${response.code()}"
+                                "some error occurred on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }

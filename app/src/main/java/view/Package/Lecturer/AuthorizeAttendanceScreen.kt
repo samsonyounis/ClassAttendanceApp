@@ -34,6 +34,8 @@ import view.Package.ReusableFunctions.topRow
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 
 @Composable
@@ -43,6 +45,10 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String, cl
     val dateFormatter = SimpleDateFormat("dd-MM-yyyy")
     val currentDate = dateFormatter.format(Date())
     var classDate by rememberSaveable { mutableStateOf(currentDate) }
+
+    val timeFormatter = SimpleDateFormat("HH:mm a")
+    val currentTime = timeFormatter.format(Date())
+    var classTime by rememberSaveable { mutableStateOf(currentTime) }
     var week by rememberSaveable { mutableStateOf("") }
     var classDuration by rememberSaveable { mutableStateOf(classDuration) }
     var instructorID by rememberSaveable { mutableStateOf("") }
@@ -143,6 +149,19 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String, cl
                         shape = RoundedCornerShape(10.dp), enabled = false, readOnly = true
                     )
                 }
+                Column {
+                    Text(text = "Time")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(value = classTime, onValueChange = {classTime = it},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        isError = false,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp), enabled = false, readOnly = true
+                    )
+                }
                 outlinedTextField(
                     valueText = week, onValueChange = {week = it}, isError = false,
                     labelText = "Semester week", placeholderText = "e.g 4",
@@ -185,7 +204,7 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String, cl
                         showProgress = true
                         val authorization = AttendanceAuthorization(
                             classCode.uppercase(),classVenue.uppercase(),classDuration.toInt(),
-                            classDate,week,instructorID)
+                            classDate, classTime, week,instructorID)
                         viewmodel.addAuthorization(authorization)
                         viewmodel.feedback.observe(lifeCycleOwner){response->
                             if (response == "success"){

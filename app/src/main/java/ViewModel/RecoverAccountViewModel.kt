@@ -22,13 +22,13 @@ class RecoverAccountViewModel(private val repository: Repository):ViewModel() {
                 }
                 else{
                     if (response.code() == 400){
-                        feedback.value = "No account found\n" +
-                                "${response.code()}"
+                        feedback.value = "No account found\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else{
                         feedback.value = "failed to send request\n" +
-                                "some error occurred on the server\n" +
-                                "${response.code()}"
+                                "some error occurred on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }

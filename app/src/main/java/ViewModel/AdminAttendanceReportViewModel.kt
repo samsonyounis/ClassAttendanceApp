@@ -11,7 +11,7 @@ import retrofit2.Response
 class AdminAttendanceReportViewModel(private  val repository: Repository):ViewModel() {
 
     var feedback: MutableLiveData<String> = MutableLiveData()
-    lateinit var attendanceRecords:List<Faculty_AttendanceReport>
+    var attendanceRecords:List<Faculty_AttendanceReport> = listOf()
 
     fun Get_FacultyAttendanceReport(classCode:String){
         repository.Get_FacultyAttendanceReport(classCode).enqueue(object :
@@ -26,8 +26,8 @@ class AdminAttendanceReportViewModel(private  val repository: Repository):ViewMo
                 }
                 else{
                     feedback.value = "failed to load attendance report\n" +
-                            "some error occurred on server\n" +
-                            "${response.code()}"
+                            "some error occurred on server\n\n" +
+                            "HTTP Error code: ${response.code()}"
                 }
             }
 

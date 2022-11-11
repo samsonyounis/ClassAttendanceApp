@@ -49,7 +49,7 @@ fun signAttendance_Screen(navController: NavController,classCode:String,lec_Devi
     var lastnameError by rememberSaveable { mutableStateOf("") }
 
     var toplabel by rememberSaveable { mutableStateOf("Sign attendance") }
-    var feedback by rememberSaveable { mutableStateOf("Successfully enrolled") }
+    var feedback by rememberSaveable { mutableStateOf("Successfully signed attendance for $classCode") }
     var showProgress by rememberSaveable { mutableStateOf(false) }
 
     val repository = Repository() // instance of the repository
@@ -124,7 +124,7 @@ fun signAttendance_Screen(navController: NavController,classCode:String,lec_Devi
                     )
                 }
                 Column {
-                    Text(text = "Lecturer device ID")
+                    Text(text = "system ID")
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(value = lec_DeviceID, onValueChange = {lec_DeviceID = it},
                         keyboardOptions = KeyboardOptions(

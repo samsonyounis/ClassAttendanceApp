@@ -36,14 +36,20 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
     viewmodel.Get_FacultyAttendanceReport(classCode)
     viewmodel.feedback.observe(lifeCycleOwner){response->
         if (response.toString() == "success"){
-            serverRes = response.toString()
             attendanceRecords = viewmodel.attendanceRecords
-            showProgress = true
+            if (attendanceRecords.isEmpty() == true){
+                serverRes = "No Attendance found"
+                showProgress = true
+            }
+            else{
+                showProgress = true
+            }
         }
         else{
             serverRes = response.toString()
             showProgress = true
         }
+
     }
 
     Scaffold(modifier = Modifier.padding(16.dp),
@@ -61,43 +67,48 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
                 }
             }
         }
+        else{
+            Column(modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .horizontalScroll(
+                    rememberScrollState()
+                )
+                .fillMaxSize()
+                .padding(top = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(text = "$classCode Attendance Report", style = MaterialTheme.typography.h1)
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(text = "Student RegNo",
+                        style = MaterialTheme.typography.h2)
+                    Text(text = "Student name",
+                        style = MaterialTheme.typography.h2)
 
-        Column(modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .horizontalScroll(
-                rememberScrollState()
-            )
-            .fillMaxSize()
-            .padding(top = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(text = "Student RegNo",
-                    style = MaterialTheme.typography.h2)
+                    Text(text = "Hours attended",
+                        style = MaterialTheme.typography.h2)
 
-                Text(text = "Student name",
-                    style = MaterialTheme.typography.h2)
-
-                Text(text = "Hours attended",
-                    style = MaterialTheme.typography.h2)
-
-                Text(text = "Total class hours",
-                    style = MaterialTheme.typography.h2)
-            }
-            if(!attendanceRecords.isEmpty()){
-                for (i in attendanceRecords){
-                    Row(modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(100.dp)) {
-                        Text(text = i.stu_RegNo)
-                        Text(text = i.stu_name)
-                        Text(text = i.hoursAttended)
-                        Text(text = i.totalClassHours)
+                    Text(text = "Total class hours",
+                        style = MaterialTheme.typography.h2)
+                }
+                if(attendanceRecords.isEmpty() == false){
+                    for (i in attendanceRecords){
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Text(text = i.stu_RegNo)
+                            Spacer(modifier = Modifier.width(130.dp))
+                            Text(text = i.stu_name)
+                            Spacer(modifier = Modifier.width(150.dp))
+                            Text(text = i.hoursAttended)
+                            Spacer(modifier = Modifier.width(100.dp))
+                            Text(text = i.totalClassHours)
+                        }
                     }
                 }
-            }
-            else{
-                Text(text = serverRes)
+                else{
+                    Text(text = serverRes)
+                }
             }
         }
+
+
     }
 }

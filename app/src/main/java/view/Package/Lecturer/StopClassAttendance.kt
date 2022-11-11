@@ -42,24 +42,6 @@ fun StopAttendanceScreen(navController: NavController){
     // innitailizing the lifeCycle owner of this compose screen
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
-    DisposableEffect(lifeCycleOwner) {
-        // Create an observer that triggers our remembered callbacks
-        // for sending analytics events
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_PAUSE) {
-                showProgress = false
-            } else if (event == Lifecycle.Event.ON_STOP) {
-            }
-        }
-
-        // Add the observer to the lifecycle
-        lifeCycleOwner.lifecycle.addObserver(observer)
-
-        // When the effect leaves the Composition, remove the observer
-        onDispose {
-            lifeCycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
 
     Scaffold(modifier = Modifier.padding(16.dp),
         topBar = {

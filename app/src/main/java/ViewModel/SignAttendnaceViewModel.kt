@@ -22,18 +22,18 @@ class SignAttendnaceViewModel(private val repository: Repository):ViewModel() {
                     if (response.code() == 400){
                         feedback.value = "failed to sign attendance\n" +
                                 "Attendance for ${request.classCode} not authorized yet or" +
-                                "you are not within the range of your instructor\n" +
-                                "${response.code()}"
+                                "you are not within the range of your instructor\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else if(response.code() == 409){
                         feedback.value = "failed to sign attendance\n" +
-                                "you have already signed the attendance for ${request.classCode}\n" +
-                                "${response.code()}"
+                                "you have already signed the attendance for ${request.classCode}\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                     else{
                         feedback.value = "failed to record the attendance\n" +
-                                    "some error occurred on the server\n" +
-                                "${response.code()}"
+                                    "some error occurred on the server\n\n" +
+                                "HTTP Error code: ${response.code()}"
                     }
                 }
             }
