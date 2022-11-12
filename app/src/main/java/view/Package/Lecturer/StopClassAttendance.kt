@@ -76,7 +76,7 @@ fun StopAttendanceScreen(navController: NavController){
                     classCodeError = "* class code must be 6 alphanumeric long with no white spaces"
                 }
                 else{
-                    showProgress = true
+                    showProgress = false
                     viewmodel.DeleteAuthorization(classCode.uppercase())
                     viewmodel.feedback.observe(lifeCycleOwner){response->
                         if (response == "success"){

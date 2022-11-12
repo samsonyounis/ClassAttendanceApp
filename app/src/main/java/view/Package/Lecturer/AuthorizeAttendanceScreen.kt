@@ -201,7 +201,7 @@ fun authorizeAttendanceScreen(navController: NavController, classCode:String, cl
                     }
                     else{
                         classVenueError = ""; weekError = ""; instructorIDError = ""
-                        showProgress = true
+                        showProgress = false
                         val authorization = AttendanceAuthorization(
                             classCode.uppercase(),classVenue.uppercase(),classDuration.toInt(),
                             classDate, classTime, week,instructorID)

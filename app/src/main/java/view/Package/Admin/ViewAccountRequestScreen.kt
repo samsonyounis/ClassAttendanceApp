@@ -36,10 +36,6 @@ fun viewAccountRequestScreen(navController: NavController,viewmodel: ViewAccount
 // variable to hold list of all account requests
     var requestList: List<AccountRequest> = rememberSaveable{ listOf() }
     var serverRes = rememberSaveable {("loading requests") }
-    var username by rememberSaveable { mutableStateOf("e.g. sam@gmail.com") }
-    var password by rememberSaveable { mutableStateOf("57tygjg") }
-    var accountType by rememberSaveable { mutableStateOf("student account") }
-    var userID by rememberSaveable { mutableStateOf("j31/4532/2018") }
 
     var showProgress by rememberSaveable { mutableStateOf(false) }
     // innitailizing the lifeCycle owner of this compose screen

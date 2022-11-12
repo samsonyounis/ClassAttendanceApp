@@ -153,6 +153,11 @@ fun input(navController: NavController){
                                     bluetoothAdapter?.setName(classCode.uppercase())
 
                                 }
+                                val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
+                                    putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1*3600)
+                                }
+                                laucher.launch(discoverableIntent)
+
                             }
                             Log.d("name", bluetoothAdapter.name)
                             navController.navigate(

@@ -220,7 +220,6 @@ fun addLecturerScreen(navController: NavController){
                     else{
                         staffIdError = ""; firstnameError = ""; middlenameError = ""; lastnameError = ""
                         emailError = ""; phoneError = ""
-                        showProgress = true
                         // creating staff object
                         val staff = Staff(staffID, staffFirstname, staffMiddlename, staffLastname,
                             email, phone,staff_DeviceID.uppercase())

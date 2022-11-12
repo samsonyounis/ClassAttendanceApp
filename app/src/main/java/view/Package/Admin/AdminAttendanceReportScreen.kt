@@ -2,17 +2,20 @@ package view.Package.Admin
 
 import Model.Faculty_AttendanceReport
 import ViewModel.AdminAttendanceReportViewModel
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import view.Package.ReusableFunctions.topRow
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun adminAttendanceReportScreen(navController: NavController, classCode:String,
        viewmodel:AdminAttendanceReportViewModel){
@@ -38,7 +42,8 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
         if (response.toString() == "success"){
             attendanceRecords = viewmodel.attendanceRecords
             if (attendanceRecords.isEmpty() == true){
-                serverRes = "No Attendance found"
+                serverRes = "No Attendance found for\n" +
+                        "$classCode"
                 showProgress = true
             }
             else{
@@ -52,9 +57,10 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
 
     }
 
-    Scaffold(modifier = Modifier.padding(16.dp),
+    Scaffold(modifier = Modifier.padding(top = 16.dp),
         topBar = {
-            topRow(text = "Class Attendance Report", navController = navController)
+            topRow(text = "Class Attendance Report\n\n" +
+                    "$classCode", navController = navController)
         }
     ) {
         // showing the circular progress
@@ -68,6 +74,49 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
             }
         }
         else{
+            if (attendanceRecords.isEmpty() == false) {
+                LazyVerticalGrid(cells = GridCells.Fixed(4),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.border(width = 3.dp, color = Color.Black, shape = RectangleShape),
+                    contentPadding = PaddingValues(10.dp)) {
+
+                    item {
+                        Text(text = "student RegNo")
+                    }
+                    item {
+                        Text(text = "student name")
+                    }
+                    item {
+                        Text(text = "Hours attended")
+                    }
+                    item {
+                        Text(text = "Total class hours")
+                    }
+                        for (i in attendanceRecords) {
+                            item {
+                                Text(text = i.stu_RegNo)
+                            }
+                            item {
+                                Text(text = i.stu_name)
+                            }
+                            item {
+                                Text(text = i.hoursAttended)
+                            }
+                            item {
+                                Text(text = i.totalClassHours)
+                            }
+                        }
+
+                }
+
+            }
+            else{
+                Column(modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = serverRes)
+                }
+            }
+            /*
             Column(modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .horizontalScroll(
@@ -107,6 +156,7 @@ fun adminAttendanceReportScreen(navController: NavController, classCode:String,
                     Text(text = serverRes)
                 }
             }
+            */
         }
 
 
