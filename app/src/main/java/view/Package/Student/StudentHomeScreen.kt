@@ -27,6 +27,8 @@ fun studentHomeScreen(navController: NavController){
     var expanded by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val  sessionManager = SessionManager(context) // instance of session Manager
+    val user_Id = sessionManager.getUser_Id()
+    var studentID by rememberSaveable { mutableStateOf(user_Id) }
     val bluetoothManager: BluetoothManager? =
         ContextCompat.getSystemService(context, BluetoothManager::class.java)
     val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.getAdapter()
@@ -93,13 +95,14 @@ fun studentHomeScreen(navController: NavController){
                     }
                     Divider()
                     DropdownMenuItem(onClick = {
-                        navController.navigate("specifyStudentAttendanceReport_Screen") }) {
+                        navController.navigate("studentAttendanceReport_Screen/$studentID") }) {
                         Text("View attendance report")
                     }
                     Divider()
                     DropdownMenuItem(onClick = {
                         // delete the current session and return the user to the login screen
                         sessionManager.deleteUserType()
+                        sessionManager.deleteUserID()
                         navController.navigate("welcome_Screen")
                     }) {
                         Text("Logout")

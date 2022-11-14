@@ -16,6 +16,7 @@ class SessionManager (context: Context) {
 
     companion object {
         const val USER_TYPE = "user_type"
+        const val USER_ID = "user_id"
     }
 
     /* Function to save user type*/
@@ -33,6 +34,21 @@ class SessionManager (context: Context) {
     fun deleteUserType(){
         val editor = prefs.edit()
         editor.remove(USER_TYPE)
+    }
+    // function to save user ID
+    fun  saveUserID(user_id:String){
+        val editor = prefs.edit()
+        editor.putString(USER_ID, user_id)
+        editor.apply()
+    }
+    //function to get user_ID
+    fun getUser_Id():String?{
+        return prefs.getString(USER_ID,null)
+    }
+    //function to delete user_id
+    fun deleteUserID(){
+        val editor = prefs.edit()
+        editor.remove(USER_ID)
     }
     /*
     /* Function to save the user selected account */

@@ -35,7 +35,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun loginScreen(navController: NavController) {
+fun loginScreen(navController: NavController, label:String) {
     val obj = LocalContext.current
     var username by rememberSaveable{ mutableStateOf("") }
     var usernameErrorMsg by rememberSaveable { mutableStateOf("") }
@@ -50,6 +50,11 @@ fun loginScreen(navController: NavController) {
     val  sessionManager = SessionManager(obj) // instance of session Manager
     val userType by rememberSaveable { mutableStateOf(sessionManager.fetchUserType()) }
     var user_type by rememberSaveable { mutableStateOf( userType.toString())}
+    var user_ID by rememberSaveable { mutableStateOf("")}
+    var user_IdError by rememberSaveable { mutableStateOf("")}
+    var user_IdIsError by rememberSaveable { mutableStateOf(false)}
+    var label by rememberSaveable { mutableStateOf(label)}
+
 
     val repository = Repository() // instance of repository
     val viewmodel = LoginViewModel(repository) // instance of viewModel
@@ -80,11 +85,25 @@ fun loginScreen(navController: NavController) {
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    Text(text = "Username/email address", modifier = Modifier.align(Alignment.Start))
+                    Text(text = label, modifier = Modifier.align(Alignment.Start))
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = user_ID, onValueChange = { user_ID = it },
+                        placeholder = { Text(text = "ID") },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text
+                        ),
+                        isError = user_IdIsError
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(text = user_IdError, color = Color.Red)
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(text = "username/email address", modifier = Modifier.align(Alignment.Start))
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
                         value = username, onValueChange = { username = it },
-                        placeholder = { Text(text = "enter your user name") },
+                        placeholder = { Text(text = "enter your email address") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text
                         ),
@@ -127,27 +146,36 @@ fun loginScreen(navController: NavController) {
                         //validating the inputs here
                         if (username.isBlank()){
                             usernameErrorMsg = "* username field is blank"; passwordErrorMsg = ""
+                            user_IdError = ""
                         }
                         else if (password.isBlank()){
                             passwordErrorMsg = "* password is blank"; usernameErrorMsg = ""
+                            user_IdError = ""
+                        }
+                        else if (user_ID.isBlank()){
+                            user_IdError = "* user id required"
+                            passwordErrorMsg = ""; usernameErrorMsg = ""
                         }
                         else{
-                            passwordErrorMsg = ""; usernameErrorMsg = ""
+                            passwordErrorMsg = ""; usernameErrorMsg = "";user_IdError = ""
                             showProgress = true
-                            val loginRequest = LoginRequest(username,password,user_type)
+                            val loginRequest = LoginRequest(username,password,user_type,user_ID)
                             viewmodel.LoginUser(loginRequest)
                             viewmodel.feedback.observe(lifeCycleOwner){response->
                                 if (response == "success"){
                                     if (userType == "STUDENT"){
                                         showProgress = false
+                                        sessionManager.saveUserID(user_ID)
                                         navController.navigate("studentHome_Screen")
                                     }
                                     else if (userType == "STAFF"){
                                         showProgress = false
+                                        sessionManager.saveUserID(user_ID)
                                         navController.navigate("staffHome_Screen")
                                     }
                                     else {
                                         showProgress = false
+                                        sessionManager.saveUserID(user_ID)
                                         navController.navigate("adminHome_Screen")
                                     }
                                 }

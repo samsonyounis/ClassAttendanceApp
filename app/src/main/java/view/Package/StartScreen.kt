@@ -37,7 +37,7 @@ fun startScreen(navController: NavController){
             )
             commonButton(onClick = {
                 // Navigating to login screen
-                navController.navigate("login_Screen")
+                navController.navigate("login_Screen/Enter your student ID")
             }, label = "Login")
 
             Text(text = "Don't have an account ?")

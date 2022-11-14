@@ -76,6 +76,7 @@ fun staffHomeScreen(navController: NavController){
                     DropdownMenuItem(onClick = {
                         // delete the current session and return the user to the login screen
                         sessionManager.deleteUserType()
+                        sessionManager.deleteUserID()
                         navController.navigate("welcome_Screen")
                     }) {
                         Text("Logout")

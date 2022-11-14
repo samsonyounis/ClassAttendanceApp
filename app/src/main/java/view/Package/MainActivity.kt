@@ -64,9 +64,13 @@ class MainActivity : ComponentActivity() {
                         ) {
                             startScreen(navController)
                         }
-                        composable("login_Screen"
+                        composable("login_Screen/{label}",
+                            arguments = listOf(
+                                navArgument("label"){NavType.StringType}
+                            )
                         ) {
-                            loginScreen(navController)
+                            val label = it.arguments?.getString("label").toString()
+                            loginScreen(navController, label)
                         }
                         composable("requestAccount_Screen"
                         ) {
